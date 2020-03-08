@@ -1,0 +1,102 @@
+.SocialheaderContainer {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    border-bottom: 2px solid #CFD0D1;
+    background: #fff;
+    z-index: 9000;
+
+    .modal {
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+        .logo {
+           margin: 0 30px;
+        }
+
+        .find1 {
+            position: relative;
+            border: 1px solid #C5C5C5;
+            padding: 3px 5px;
+            width: 250px;
+            input {
+                width: 90%;
+                border: none;
+                padding: 3px;
+                font-size: 10px;
+                color: #8C8C8C;
+            }
+
+            button {
+                position: absolute;
+                width: 20px;
+                height: 20px;
+                top: 50%;
+                transform: translateY(-10px);
+                border: none;
+                background: #fff;
+                cursor: pointer;
+                outline: none;
+            }
+            button::after {
+                position: absolute;
+                content: ' ';
+                top: 0px;
+                right: 0px;
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                border: 3px solid #BDBDBD;
+            }
+            button::before {
+                position: absolute;
+                content:  ' ';
+                bottom: 5px;
+                right: -7px;
+                width: 8px;
+                height: 8px;
+                border-left: 3px solid #BDBDBD;
+                transform: rotate(-45deg);
+            }
+        }
+
+        .show {
+            position: absolute;
+            right: 0;
+            height: 100%;
+            ul {
+                overflow: hidden;
+                height: 100%;
+            }
+            li {
+                display: flex;
+                height: 100%;
+                font-size: 14px;
+                float: left;
+                margin: 0 20px;
+                list-style: none;
+                align-items: center;
+
+                span {
+                    font-size: 6px;
+                    background: red;
+                    color: #fff;
+                    padding: 0px 6px;
+                    margin-left: 5px;
+                    border-radius: 8px;
+                }
+                a {
+                    color: #000;
+                    font-size: 14px;
+                }
+            }
+            .self {
+                width: 50px;
+                height: 50px;
+                border-radius: 100%;
+                cursor: pointer;
+            }
+        }
+    }
+}

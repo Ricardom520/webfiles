@@ -1,0 +1,51 @@
+.RecomBPContainer {
+    position: relative;
+    list-style: none;
+    width: 250px;
+    border: 1px solid #D4D5D5;
+    background-color: #fff;
+    transition: all .5s ease;
+
+    a {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: 100%;
+        color: #8A8A8A;
+        text-decoration: none;
+
+        .headImg {
+            position: absolute;
+            z-index: 999;
+            left: 50%;
+            top: 42%;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 5px solid #fff;
+            background-color: #fff;
+            transform: translateX(-50px) translateY(-50px);
+        }
+    }
+    img {
+        width: 100%;
+        height: 150px;
+    }
+
+    .disc {
+        margin-top: 60px;
+        p {
+            width: 100%;
+            text-align: center;
+            padding: 5px 0;
+            img {
+                width: 16px;
+                height: 16px;
+            }
+        }
+    }
+}
+.RecomBPContainer:hover {
+    top: -10px;
+    box-shadow: 5px 5px 5px #B9BABA;
+}

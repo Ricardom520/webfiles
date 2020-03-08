@@ -1,0 +1,52 @@
+.singlePContainer {
+    height: 350px;
+    position: relative;
+    list-style: none;
+    width: 250px;
+    border: 1px solid #D4D5D5;
+    background-color: #fff;
+    transition: all .5s ease;
+
+    img {
+        width: 100%;
+    }
+
+    a {
+        text-decoration: none;
+    }
+    
+    .disc {
+        display: flex;
+        flex-direction: column;
+        color: #888888;
+        p {
+            position: relative;
+        }
+        p:last-child {
+            position: absolute;
+            width: 100%;
+            bottom: 5px;
+            padding: 0 5px;
+        }
+        .title {
+            height: 80%;
+            h4 {
+                font-size: 14px;
+                font-weight: bold;
+                padding: 5px 8px;
+            }
+        }
+        .good {
+            position: absolute;
+            right: 10px;
+            top: -10px;
+            color: #fff;
+            padding: 5px 10px;
+            background-color: #FFBB33;
+        }
+    }
+}
+.singlePContainer:hover {
+    top: -10px;
+    box-shadow: 5px 5px 5px #B9BABA;
+}

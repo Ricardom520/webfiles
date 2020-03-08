@@ -1,0 +1,102 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const utils = require('./utils');
+const paths = require('./paths');
+const config = require('../src/common/config');
+
+module.exports = {
+    stats: {
+        modules: false,
+        children: false,
+        chunks: false,
+        chunkModules: false
+    },
+    resolve: {
+        extensions: ['.web.js','.vue','.mjs','.js','.json','.web.jsx','.jsx'], // 引入的时候，可以忽略文件后缀名
+        alias: {
+            '@': utils.resolve('src'),
+            'react-dom': '@hot-loader/react-dom'
+        }
+    },
+    externals: { // 从输出的 bundle 中排除依赖
+        jquery: 'jQuery', // 例如，从CDN引入JQuery，而不是把它打包
+    },
+    module: {
+        rules: [
+            {
+                test: /\.(png|svg|jpe?g|gif|webp)$/,
+                use: [
+                    {
+                        loader: 'url-loader', // 根据图片大小，把图片优化成base64
+                        options: {
+                        limit: 8192, // 限制如果小于8k，图片转为base64
+                        name: 'static/img/[name].[hash:8].[ext]'
+                        }
+                    },{
+                        loader: 'image-webpack-loader', // 先进行图片优化
+                        /*options: {
+                            mozjpeg: { // 压缩JPEG图像
+                                progressive: true,
+                                quality: 65
+                            },
+                            optipng: { // 压缩PNG图像
+                                enabled: true
+                            },
+                            pngquant: { // 压缩PNG图像
+                                quality: '65-90',
+                                speed: 4
+                            },
+                            gifsicle: { // 压缩GIF图像
+                                interlaced: false
+                            },
+                            webp: { // 将JPG和PNG图像压缩为WEBP
+                                quality: 75
+                            }
+                        }*/
+                    }
+                ]
+            },
+            {
+                test: /\.(woff|woff2|eot|ttf|otf|pdf)$/, // 自定义字体的压缩
+                use: [
+                    'file-loader'
+                ]
+            },
+            {
+                test: /\.(js|jsx)$/,
+                include: paths.appSrc, //加快编译速度，只编译src目录
+                use: [
+                    {
+                        loader: require.resolve('babel-loader'),
+                        options: {
+                            cacheDirectory: true, // 指定的目录将用来缓存loader的执行结果，之后的webpack构建，将会尝试读取缓存，来避免在每次执行时，可能产生的、高性能消耗的 Babel 重新编译过程(recompilation process)
+                        }
+                    },
+                    /*{
+                        loader: 'eslint-loader',
+                        options: {
+                            // eslint options (if necseeary)
+                            // fix: true
+                        }
+                    }*/
+                ]
+            },
+        ]
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            title: config.PROJECT_NAME, // 默认值， Webpack App
+            // filename: 'index.html', // 默认值: 'index.html'
+            template: paths.appHtml,
+            minify: {
+                collapseWhitespace: true, // 清理html中的空格、换行符。（默认值false）
+                removeComments: true, // 清理html中的注释（默认值false）
+                removeAttributeQuotes: true, // 移除属性的引导
+                removeEmptyAttributes: false, // 清理内容为空的元素。(默认值false,这个功能慎用，空元素可能用于占位或在js逻辑里有填充动作)
+                removeStyleLinkTypeAttributes: true, // 构建后style和link标签的type属性被清理（默认值false）
+                minifyJS: true, // 压缩html内的js（默认值false）
+                minifyCSS: true, // 压缩html内的样式（默认值false）
+                minifyURLs: true,
+            }
+        }),
+    ],
+};

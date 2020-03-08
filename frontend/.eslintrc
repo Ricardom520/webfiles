@@ -1,0 +1,44 @@
+{
+    "parser": "babel-eslint",
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "ecmaFeatures": {
+        "jsx": true,
+        "modules": true,
+        "legacyDecorators": true
+      },
+      "experimentalObjectRestSpread": true, //结构赋值
+      "sourceType": "module"
+    },
+    "env": {
+      "browser": true,
+      "node": true,
+      "es6": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended"
+    ],
+    "plugins": ["react"],
+    "settings": {
+      "react": {
+        "createClass": "createReactClass",
+        "pragma": "React",
+        "version": "detect",
+        "flowVersion": "0.53"
+      }
+    },
+    "rules": {
+      "semi": [1, "always"], //句末封号
+      "quotes": [1, "single", {  "allowTemplateLiterals": true }], //单引号
+      "react/no-unescaped-entities": [2, { "forbid": [">", "}"] }],
+      "react/display-name": [0],
+      "no-unused-vars": [1,
+        {
+          "vars": "all", // 变量定义必须被使用
+          "args": "none" // 对于函数形参不检测
+        }
+      ]
+    }
+  }
+  

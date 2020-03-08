@@ -1,0 +1,68 @@
+.RenameContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(84, 83, 83, .8);
+
+    .box {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        
+        .Content {
+            width: 350px;
+            margin: 0 auto;
+            background-color: #fff;
+
+            .title {
+                display: flex;
+                justify-content: space-between;
+                padding: 5px 10px;
+                background-color: #3D97F2;
+                span.til {
+                    color: #fff;
+                }
+                span:hover {
+                    cursor: pointer;
+                }
+            }
+
+            .middle {
+                padding: 40px 5px 20px 10px;
+                input {
+                    padding: 3px;
+                    width: 75%;
+                }
+            }
+
+            .btnContent {
+                padding: 5px 0 15px 0;
+                text-align: center;
+                button {
+                    cursor: pointer;
+                    outline: none;
+                    color: #fff;
+                    font-size: 14px;
+                    border: none;
+                    border-radius: 5px;
+                    margin: 0px 20px;
+                    padding: 4px 8px;
+                }
+                .submit {
+                    background: #1A73E8;
+                }
+                .submit:hover {
+                    background: #3D8AEF;
+                }
+                .reset {
+                    background: #D3D5D7;
+                }
+                .reset:hover {
+                    background-color: #B8BBBD;
+                }
+            }
+        }
+    }
+}

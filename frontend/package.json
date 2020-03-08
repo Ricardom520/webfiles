@@ -1,0 +1,71 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node config/dev.server"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-decorators": "^7.7.4",
+    "@babel/plugin-transform-runtime": "^7.7.6",
+    "@babel/preset-env": "^7.7.7",
+    "@babel/preset-react": "^7.7.4",
+    "autoprefixer": "^9.7.3",
+    "axios": "^0.19.2",
+    "babel-eslint": "^10.0.3",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-import": "^1.13.0",
+    "css-loader": "^3.4.0",
+    "echarts-for-react": "^2.0.15-beta.1",
+    "eslint": "^6.8.0",
+    "eslint-loader": "^3.0.3",
+    "eslint-plugin-react": "^7.17.0",
+    "file-loader": "^5.0.2",
+    "fusioncharts": "^3.15.1",
+    "html-webpack-plugin": "^3.2.0",
+    "image-webpack-loader": "^6.0.0",
+    "less": "^3.10.3",
+    "less-loader": "^5.0.0",
+    "postcss-loader": "^3.0.0",
+    "rc-tween-one": "^2.6.8",
+    "react-fusioncharts": "^3.1.2",
+    "style-loader": "^1.1.1",
+    "url-loader": "^3.0.0",
+    "webpack": "^4.41.4",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.1",
+    "webpack-merge": "^4.2.2"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.7.7",
+    "@hot-loader/react-dom": "^16.11.0+4.12.16",
+    "antd": "^3.26.7",
+    "dva": "^2.4.1",
+    "echarts": "^4.6.0",
+    "echarts-for-react": "^2.0.15-beta.1",
+    "fusioncharts": "^3.15.0-sr.1",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-fusioncharts": "^3.0.1",
+    "react-hot-loader": "^4.12.18",
+    "react-loadable": "^5.5.0",
+    "react-pie3d": "^1.0.0",
+    "react-redux": "^7.2.0",
+    "react-router-dom": "^5.1.2",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "wangeditor": "^3.1.1"
+  },
+  "proxy": {
+    "/*": {
+      "target": "http://127.0.0.1/webfiles/public/index.php",
+      "changeOrigin": true
+    }
+  }
+}
