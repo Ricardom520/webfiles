@@ -11,18 +11,46 @@ class TableMenus extends Component {
         let filename = name.split('.')[0];
         let type = name.split('.')[1];
         let filetype;
-        if (type == 'jpg' || type == 'jpeg' || type == 'png' || type == 'gif' || type == 'webp') {
-            filetype = 2;
+        switch (type) {
+            case type == 'jpg' || type == 'jpeg' || type == 'png' || type == 'gif' || type == 'webp' || type == 'svg': // 图片
+                filetype = 2;
+                break;
+            case type == 'xlsx': // excel表格
+                filetype = 7;
+                break;
+            case type == 'zip': // 压缩包
+                filetype = 5;
+                break;
+            case type == 'docx' || type == 'doc': // word文档
+                filetype = 1;
+                break;
+            case type == 'pdf': // pdf
+                filetype = 9;
+                break;
+            case type == 'ppt' || type == 'pptx': // ppt
+                filetype = 8;
+                break;
+            case type == 'cda' || type == 'wav' || type == 'mp3' || type == 'wma' || type == 'ra' || type == 'midi' || type == 'ogg' || type == 'ape' || type == 'flac' || type == 'aac':
+                filetype = 3;
+                break;
+            case type == 'avi' || type == 'mpeg' || type == 'mpg' || type == 'dat' || type == 'ra' || type == 'rm' || type == 'mov' || type == 'qt' || type == 'asf' || type == 'wmv' || type == 'avi':
+                filetype = 4;
+                break;
+            default:
+                filetype = 6;
+                break;
+
         }
         let filesize = file.size;
         let reader = new window.FileReader();
         reader.readAsDataURL(file);
+        let that = this;
         reader.onload = function() {
-            console.log("进来了吗")
+            //console.log(reader.result)
             let params = Object.assign({filename:filename},{filetype:filetype},{filesize:filesize},{content:reader.result})
-            //this.props.uploadFile(params)
+            that.props.uploadFile(params)
         }
-        target.outerHTML = target.outerHTML;
+        target.value = '';
     }
     render() {
         const {tbodyMenus,refresh,pasteFile,copySystemid,showAttribute,createFile,uploadFile} = this.props;

@@ -83,7 +83,7 @@ class Myfiles extends Component {
         }
         console.log("上传啦啦啦拉拉啊")
         params = Object.assign(params,{userid:userid},{username:username},{parentid:parentid})
-        //this.props.uploadFile(params);
+        this.props.uploadFile(params);
     }
     render() {
         let {myfilesData,location} = this.state;

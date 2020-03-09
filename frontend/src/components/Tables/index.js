@@ -235,12 +235,15 @@ class Table extends Component {
                                                 return (
                                                     <td width={data.width} style={data.right?{paddingRight: '1%',textAlign: 'right'}:{}}>{data.hasImg?<img src={
                                                                                                                                                                     item.filetype === 0 ? common.file.default :
-                                                                                                                                                                    item.filetype === 1 ? icon.file4.default :
+                                                                                                                                                                    item.filetype === 1 ? icon.word.default :
                                                                                                                                                                     item.filetype === 2 ? icon.photo.default :
                                                                                                                                                                     item.filetype === 3 ? icon.music.default :
                                                                                                                                                                     item.filetype === 4 ? icon.video.default :
                                                                                                                                                                     item.filetype === 5 ? icon.package.default :
-                                                                                                                                                                    item.filetype === 6 ? icon.file3.default : ''
+                                                                                                                                                                    item.filetype === 6 ? icon.file3.default :
+                                                                                                                                                                    item.filetype === 7 ? icon.excel.default :
+                                                                                                                                                                    item.filetype === 8 ? icon.ppt.default :
+                                                                                                                                                                    item.filetype === 9 ? icon.pdf.default : ''
                                                                                                                                                                 }></img>:''}{item[data.dataIndex]}</td>
                                                 )
                                             })

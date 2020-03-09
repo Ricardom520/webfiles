@@ -37,6 +37,10 @@ const icon = {
     rename: require('./icon/rename.png'),
     download: require('./icon/download.png'),
     open: require('./icon/open.png'),
+    word: require('./icon/word.png'),
+    ppt: require('./icon/ppt.png'),
+    excel: require('./icon/excel.png'),
+    pdf: require('./icon/PDF.png'),
 };
 
 const common= {
