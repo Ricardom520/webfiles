@@ -11,32 +11,27 @@ import {
     deleteFile,
     shearFile,
     createFile,
-    uploadFile
+    uploadFile,
+    findFile,
+    backFile,
+    frontFile,
 } from '../../models/files';
 import '../files.less';
+import {
+    downloadFileRequest
+} from '../../services';
 
 class Myfiles extends Component {
     constructor(props) {
         super(props);
         this.state = {
             myfilesData: [],
-            location: ''
+            location: '',
         }
     }
     componentDidMount() {
         let {curParentid} = this.props.myfiles;
         this.initMyfiles(curParentid);
-    }
-    componentWillReceiveProps(nextprops) {
-        let location = '';
-        let fileLists = this.props.myfiles.fileLists;
-        for (let i = 0; i < fileLists.length; i++) {
-            location += '/' + fileLists[i].filename;
-        }
-        this.setState({
-            location: location,
-            myfilesData: this.props.myfiles.myfilesData
-        })
     }
     initMyfiles = (parentid,filename) => {
         let userid = sessionStorage.getItem('userid');
@@ -73,7 +68,7 @@ class Myfiles extends Component {
         let parentid = this.props.myfiles.curParentid;
         this.props.createFile({parentid:parentid,userid:userid,username:username});
     }
-    uploadFile = (params) => { // 上传文件
+    uploadFile = (params,e) => { // 上传文件
         let userid = sessionStorage.getItem('userid');
         let username = sessionStorage.getItem('username');
         let parentid = this.props.myfiles.curParentid;
@@ -85,8 +80,86 @@ class Myfiles extends Component {
         params = Object.assign(params,{userid:userid},{username:username},{parentid:parentid})
         this.props.uploadFile(params);
     }
+    downloadFile = (systemid,filename,filetype_cn) => { // 下载文件
+        let userid = sessionStorage.getItem('userid');
+        let that = this;
+        let params = Object.assign({userid:userid,systemid:systemid});
+        let download = this.download;
+        download.download = filename +"."+filetype_cn;
+        downloadFileRequest(params)
+            .then(res=>{
+                console.log(res)
+                let blob = new Blob([this.b64toBlob(res.content)])
+                download.href = URL.createObjectURL(blob);
+                
+                download.click();
+                console.log(download)
+            })
+    }
+    b64toBlob = (b64Data, contentType, sliceSize) => {
+        contentType = contentType || '';
+        sliceSize = sliceSize || 512;
+        
+        let byteCharacters = atob(b64Data.substring(b64Data.indexOf(',')+1));
+        let byteArrays = [];
+
+        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+            let slice = byteCharacters.slice(offset,offset+sliceSize);
+            let byteNumbers = new Array(slice.length);
+            for (let i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            let byteArray = new Uint8Array(byteNumbers);
+            byteArrays.push(byteArray);
+        }
+        let blob = new Blob(byteArrays, {type: contentType});
+        return blob;
+    }
+    findFile(e) { // 寻找文件
+        let value = e.target.value;
+        console.log(value)
+        let parentid = this.props.myfiles.curParentid;
+        let userid = sessionStorage.getItem('userid');
+        this.props.findFile({filename: value,parentid: parentid, userid: userid});
+    }
+    backFile() { // 后退
+        if (Object.assign(this.props.myfiles.fileLists).length) {
+            console.log(this.props.myfiles)
+            //this.props.backFile();
+            let fileLists = this.props.myfiles.fileLists;
+            let userid = sessionStorage.getItem('userid');
+            for (let i = fileLists.length - 2; i >=0; i--) {
+                console.log(i)
+                console.log(fileLists[i])
+                this.props.backFile({parentid: fileLists[i].systemid, userid: userid});
+                break;
+            }
+        } else {
+            return;
+        }
+    }
+    frontFile() { // 前进
+        console.log(this.props.myfiles)
+        if (this.props.myfiles.backFile.systemid) {
+            let userid = sessionStorage.getItem('userid');
+            this.props.frontFile({userid:userid, parentid: this.props.myfiles.backFile.systemid})
+        }
+    }
+    componentWillReceiveProps(nextprops) {
+        let location = '';
+        let fileLists = this.props.myfiles.fileLists;
+        for (let i = 0; i < fileLists.length; i++) {
+            location += '/' + fileLists[i].filename;
+        }
+        this.setState({
+            location: location,
+            myfilesData: this.props.myfiles.myfilesData
+        })
+        console.log(nextprops)
+    }
     render() {
-        let {myfilesData,location} = this.state;
+        let {myfilesData,location,content} = this.state;
         let {curParentid,fileLists} = this.props.myfiles;
         let columns  = [
             {
@@ -98,8 +171,8 @@ class Myfiles extends Component {
             },
             {
                 title: '类型',
-                dataIndex: 'filetype',
-                key: 'filetype',
+                dataIndex: 'filetype_cn',
+                key: 'filetype_cn',
                 width: '5%',
             },
             {
@@ -116,33 +189,19 @@ class Myfiles extends Component {
                 width: '12%',
             },
         ]
-        let dataSource = [
-            {
-                filename: '文件夹',
-                filetype: 0,
-                filesize: '12KB',
-                createtime: '2019-8-17 12:54:12'
-            },
-            {
-                filename: '文件夹1',
-                filetype: 1,
-                filesize: '122KB',
-                createtime: '2019-8-17 12:54:12'
-            }
-        ]
         return (
             <Fragment>
                 <div className='header'>
                     <div className='backFront'>
-                        <button className='left'></button>
-                        <button className='right'></button>
+                        <button className={Object.keys(this.props.myfiles.fileLists).length>1?'left active': 'left'} onClick={()=>this.backFile()}></button>
+                        <button className={Object.keys(this.props.myfiles.backFile).length>1?'right active': 'right'} onClick={()=>this.frontFile()}></button>
                     </div>
                     <div className='route'>
                         <div className='log borderR'>
                             <img src={common.house.default}></img>
                         </div>
                         <div className='line'>
-                            <img src={icon.favorites2.default} style={{width: '14px'}}></img>
+                            <img src={icon.house.default} style={{width: '14px'}}></img>
                             <ul>
                                 {
                                     fileLists.map(item=>{
@@ -155,7 +214,7 @@ class Myfiles extends Component {
                                 }
                             </ul>
                         </div>
-                        <div className='return right'>
+                        <div className='return right' onClick={()=>this.backFile()}>
                             <img src={common.arrow.default}></img>
                         </div>
                         <div className='like right borderR'>
@@ -163,7 +222,7 @@ class Myfiles extends Component {
                         </div>
                     </div>
                     <div className='find'>
-                        <input type="search"></input>
+                        <input type="search" onChange={(e)=>this.findFile(e)}></input>
                         <button>
                             <img src={common.find.default} style={{width: '80%'}}></img>
                         </button>
@@ -177,9 +236,12 @@ class Myfiles extends Component {
                             <button></button>
                         </div>
                         <div className='operation'>
-                            <img src={common.arrow2.default}></img>
-                            上传
+                            <label for="file">
+                                <img src={common.arrow2.default}></img>
+                                上传
+                            </label>
                             <button></button>
+                            <input type="file" onChange={(e)=>this.uploadFile(false,e)} style={{display:'none'}} id="file"/>
                         </div>
                     </div>
                     <div className='tables'>
@@ -195,9 +257,12 @@ class Myfiles extends Component {
                             location={location}
                             createFile={this.createFile}
                             uploadFile={this.uploadFile}
+                            downloadFile={this.downloadFile}
+                            content={content}
                         />
                     </div>
                 </div>
+                <a ref={download=>this.download=download} style={{display:'none'}} download>下载隐藏按钮</a>
             </Fragment>
         )
     }
@@ -217,5 +282,8 @@ export default connect(mapStateToProps,{
                                         deleteFile,
                                         shearFile,
                                         createFile,
-                                        uploadFile
+                                        uploadFile,
+                                        findFile,
+                                        backFile,
+                                        frontFile,
                                     })(withRouter(Myfiles));

@@ -15,16 +15,15 @@ const service = axios.create({
 service.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
 service.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
 service.defaults.headers.delete['Content-Type'] = 'application/x-www-form-urlencoded';*/
- console.log(service.defaults);
- console.log(service.defaults.headers)
 // 设置请求拦截器
 service.interceptors.request.use(req=>{
+    console.log(req)
     if (req.method === 'post') {
         Object.assign(req.data, {_t: Date.parse(new Date()) / 1000})
         let Postdata = qs.stringify(req.data);
         req.data = Postdata;
     } else if (req.method === 'get') {
-        res.params = {
+        req.params = {
             _t: Date.parse(new Date()) / 1000,
             ...req.params
         }
@@ -39,7 +38,7 @@ service.interceptors.request.use(req=>{
 })
 
 // 设置响应拦截器
-service.interceptors.response.use((res)=>{
+service.interceptors.response.use(res=>{
     console.log(res)
     return res.data;
 }, function (error) {

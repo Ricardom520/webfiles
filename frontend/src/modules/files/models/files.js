@@ -7,6 +7,11 @@ import {
     deleteFileRequest,
     createFileRequest,
     uploadFileRequest,
+    findFileRequest,
+    initDustbinRequest,
+    deleteDustbinRequest,
+    reductionDustbinRequest,
+    findDustFileRequest,
 } from '../services';
 
 export const initMyfiles = (params) => {
@@ -104,6 +109,89 @@ export const uploadFile = (params) => {
             })
             .catch(error=>{
                 console.log(error)
+            })
+    }
+}
+
+export const findFile = (params) => {
+    return dispatch => {
+        findFileRequest(params)
+            .then(res=> {
+                console.log(res)
+                dispatch({type: actionTypes.FINDDATA_MYFILE,payload:res})
+            })
+    }
+}
+
+export const backFile = (params) => {
+    return dispatch => {
+        console.log(params)
+        initMyfilesRequest(params)
+            .then(res=>{
+                dispatch({type: actionTypes.BACKDATA_MYFILE,payload:res})
+            })
+    }
+} 
+
+export const frontFile = (params) => {
+    return dispatch => {
+        console.log(params)
+        initMyfilesRequest(params)
+            .then(res=>{
+                dispatch({type: actionTypes.FRONTDATA_MYFILE,payload:res})
+            })
+    } 
+}
+
+export const initDustbin = (params) => {
+    return dispatch => {
+        initDustbinRequest(params)
+            .then(res=>{
+                console.log(res);
+                dispatch({type: actionTypes.INITDATA_DUSTBIN,payload:res})
+            })
+    }
+}
+
+export const deleteDusbin = (params) => {
+    console.log(params)
+    return dispatch => {
+        deleteDustbinRequest(params)
+            .then(res=>{
+                console.log(res)
+                if (res.code === 0) {
+                    message.success(res.msg);
+                }
+                dispatch({type:actionTypes.DELETEDATA_DUSTBIN,payload: params})
+            })
+            .catch(error=>{
+                console.log(error)
+            })
+    }
+}
+
+export const reductionDustbin = (params) => {
+    return dispatch => {
+        reductionDustbinRequest(params)
+            .then(res=>{
+                console.log(res)
+                if (res.code === 0) {
+                    message.success(res.msg);
+                }
+            })
+        dispatch({type: actionTypes.REDUCTIONDATA_DUSTBIN,payload: params})
+    }
+}
+
+export const findDustFile = (params) => {
+    return dispatch => {
+        findDustFileRequest(params)
+            .then(res=>{
+                console.log(res);
+                dispatch({type: actionTypes.FINDDATA_DUSTBIN,payload:res})
+            })
+            .catch(error=>{
+                console.log(error);
             })
     }
 }

@@ -12,11 +12,46 @@ class Myfiles extends Controller
         $data = $request->post();
         $userid = $data['userid'];
         $parentid = $data['parentid'];
-        $sql = 'Select systemid, userid, filename, filetype, filesize, parentid, createtime from files where userid ="'.$userid.'" and parentid ="'.$parentid.'"';
+        $sql = 'Select systemid, userid, filename, filetype, filesize, parentid, createtime,filetype_hz from files where userid ="'.$userid.'" and parentid ="'.$parentid.'"';
         $res = Db::query($sql);
         $this->mergeSort($res);
         for ($i = 0; $i <count($res); $i++) {
             $res[$i]['filesize'] = round(($res[$i]['filesize']/1024),2).'KB';
+            switch($res[$i]['filetype']) {
+                case 0:
+                    $res[$i]['filetype_cn'] = '文件夹';
+                    break;
+                case 1:
+                    $res[$i]['filetype_cn'] = 'WORD';
+                    break;
+                case 2:
+                    $res[$i]['filetype_cn'] = '图片';
+                    break;
+                case 3:
+                    $res[$i]['filetype_cn'] = '音乐';
+                    break;
+                case 4:
+                    $res[$i]['filetype_cn'] = '视频';
+                    break;
+                case 5:
+                    $res[$i]['filetype_cn'] = '压缩包';
+                    break;
+                case 6:
+                    $res[$i]['filetype_cn'] = '其他';
+                    break;
+                case 7:
+                    $res[$i]['filetype_cn'] = 'EXCEL';
+                    break;
+                case 8:
+                    $res[$i]['filetype_cn'] = 'PPT';
+                    break;
+                case 9:
+                    $res[$i]['filetype_cn'] = 'PDF';
+                    break;
+                default:
+                    $res[$i]['filetype_cn'] = '其他';
+                    break;
+            };
         }
         return $res;
     }
@@ -33,9 +68,9 @@ class Myfiles extends Controller
         $file = Db::query($SeSql);
         $currentData = date('Y-m-d H:i:s');
         $newSystemid = substr($userid,0,2).time().substr($systemid,-2);
-        $Insql = 'Insert into files (systemid,userid,parentid,filename,filetype,content,filesize,createtime,modifytime,username) 
+        $Insql = 'Insert into files (systemid,userid,parentid,filename,filetype,content,filesize,createtime,modifytime,username,filetype_hz) 
                     values("'.$newSystemid.'","'.$userid.'","'.$curParentid.'","'.$file[0]['filename'].'",'.$file[0]['filetype'].',"'.$file[0]['content'].'"
-                    ,"'.$file[0]['filesize'].'","'.$currentData.'","'.$currentData.'","'.$username.'")';
+                    ,"'.$file[0]['filesize'].'","'.$currentData.'","'.$currentData.'","'.$username.'","'.$file[0]['filetype_hz'].'")';
         Db::query($Insql);
         $file[0]['systemid'] = $newSystemid;
         $file[0]['parentid'] = $curParentid;
@@ -66,9 +101,9 @@ class Myfiles extends Controller
         $res = Db::query($SeSql);
 
         $currentData = date('Y-m-d H:i:s');
-        $Insql = 'Insert into dustbin (systemid, userid, username, filename, filesize, filetype, content, deletetime, location) values (
+        $Insql = 'Insert into dustbin (systemid, userid, username, filename, filesize, filetype, content, deletetime, location, filetype_hz, createtime) values (
                     "'.$systemid.'","'.$userid.'","'.$res[0]['username'].'","'.$res[0]['filename'].'",'.$res[0]['filesize'].','
-                    .$res[0]['filetype'].',"'.$res[0]['content'].'","'.$currentData.'","'.$location.'")';
+                    .$res[0]['filetype'].',"'.$res[0]['content'].'","'.$currentData.'","'.$location.'","'.$res[0]['filetype_hz'].'","'.$res[0]['createtime'].'")';
         Db::query($Insql);
         $Delsql = 'Delete from files where systemid="'.$systemid.'" and userid="'.$userid.'"';
         $a = Db::query($Delsql);
@@ -91,9 +126,9 @@ class Myfiles extends Controller
         $userid = $data['userid'];
         $username = $data['username'];
         $systemid = substr($userid,0,2).time().rand(0,10);
-        $Insql = 'Insert into files (systemid, userid, parentid, username, filename, filesize, filetype, content, createtime) values (
+        $Insql = 'Insert into files (systemid, userid, parentid, username, filename, filesize, filetype, content, createtime,filetype_hz) values (
             "'.$systemid.'","'.$userid.'","'.$parentid.'","'.$username.'","'.$filename.'",'.$filesize.','
-            .$filetype.',null,"'.$currentData.'")';
+            .$filetype.',null,"'.$currentData.'",null)';
         Db::query($Insql);
         $arr = array(
             'filename'=>$filename,
@@ -118,11 +153,12 @@ class Myfiles extends Controller
         $filetype = (int)$data['filetype'];
         $content = $data['content'];
         $username = $data['username'];
+        $filetype_hz = $data['filetype_hz'];
         $currentData = date('Y-m-d H:i:s');
         $systemid = substr($userid,0,2).time().rand(0,10);
-        $Insql = 'Insert into files (systemid, userid, parentid, username, filename, filesize, filetype, content, createtime) values (
+        $Insql = 'Insert into files (systemid, userid, parentid, username, filename, filesize, filetype, content, createtime, filetype_hz) values (
             "'.$systemid.'","'.$userid.'","'.$parentid.'","'.$username.'","'.$filename.'",'.$filesize.','
-            .$filetype.',"'.$content.'","'.$currentData.'")';
+            .$filetype.',"'.$content.'","'.$currentData.'","'.$filetype_hz.'")';
         Db::query($Insql);
         $filesize = round(($filesize / 1024),2).'KB';
         $arr = array(
@@ -135,6 +171,29 @@ class Myfiles extends Controller
             'systemid'=>$systemid,
         );
         return $arr;
+    }
+
+    public function download(Request $request)
+    {
+        header('Access-Control-Allow-Origin:*');
+        $data = $request->get();
+        $userid = $data['userid'];
+        $systemid = $data['systemid'];
+        $sql = 'Select content from files where userid="'.$userid.'" and systemid ="'.$systemid.'"';
+        $res = Db::query($sql);
+        return $res[0];
+    }
+
+    public function find(Request $request)
+    {
+        header('Access-Control-Allow-Origin:*');
+        $data = $request->post();
+        $userid = $data['userid'];
+        $parentid = $data['parentid'];
+        $filename = $data['filename'];
+        $sql = 'Select systemid, userid, filename, filetype, filesize, parentid, createtime,filetype_hz from files where userid ="'.$userid.'" and parentid ="'.$parentid.'" and LOCATE("'.$filename.'",filename) > 0';
+        $res = Db::query($sql);
+        return $res;
     }
 
     private function mergeSort(&$arr) 

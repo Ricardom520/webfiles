@@ -4,7 +4,7 @@ import '../TableMenus/tablemenus.less';
 
 class TableMenus extends Component {
     render() {
-        let {trMenus,copyFile,renameFile,deleteFile,shearFile,showAttribute} = this.props;
+        let {trMenus,copyFile,renameFile,deleteFile,shearFile,showAttribute,downloadFile} = this.props;
         console.log(trMenus)
         return (
             <div className="tablemenusContainer" style={trMenus?{display:'block'}:{display:'none'}} id="trmenus">
@@ -12,7 +12,7 @@ class TableMenus extends Component {
                     <li>
                         <img src={icon.open.default}></img>打开
                     </li>
-                    <li>
+                    <li onClick={downloadFile}>
                         <img src={icon.download.default}></img>下载
                     </li>
                     <li>

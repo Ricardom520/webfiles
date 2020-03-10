@@ -1,36 +1,33 @@
 import React , { Component, Fragment } from 'react';
-import TableMenus from '../TableMenus';
-import TableTrMenus from '../TableTrMenus';
+import DustbinTbodyMenus from '../DustbinTbodyMenus';
+import DustbinTrMenus from '../DustbinTrMenus';
 import Rename from '../Rename';
 import Attribute from '../Attribute';
 import { icon, common } from '../../images';
-import './table.less';
+import '../Tables/table.less';
 
-class Table extends Component {
+class DustbinTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            tbodyMenus: false,
-            trMenus: false,
+            dustbinTbodyMenus: false,
+            dustbinTrMenus: false,
             systemid: '',
             parentid: '',
             filetype: '',
             filename: '',
             filesize: '',
-            createtime: '',
-            copySystemid: '',
-            copyParentid: '',
-            renameFlag: false,
             attributeFlag: false,
-            filetype_cn: ''
+            filetype_cn: '',
+            location: ''
         }
     }
     onClickTbody(e) {
-    let type = e._targetInst.type;
+        let type = e._targetInst.type;
         if (type == 'tbody') {
             this.setState({
-                tbodyMenus: false,
-                trMenus: false
+                dustbinTbodyMenus: false,
+                dustbinTrMenus: false
             })
             let tBody = this.tBody;
         
@@ -42,15 +39,14 @@ class Table extends Component {
         }
     }
     onContextTbodyMenu(e) {
-        let target = e.target;
         let type = e._targetInst.type;
         let x = e.nativeEvent.screenX;
         let y = e.nativeEvent.screenY;
-        let tbodymenus = document.getElementById('tbodymenus');
+        let tbodymenus = document.getElementById('dustbinTbodyMenus');
         if (type == 'tbody') {
             this.setState({
-                tbodyMenus: true,
-                trMenus: false
+                dustbinTbodyMenus: true,
+                dustbinTrMenus: false
             })
             if (x + 185 <= document.body.clientWidth) {
                 tbodymenus.style.left = x + 5 + 'px';
@@ -62,29 +58,30 @@ class Table extends Component {
         }
         e.preventDefault();
     }
-    onContextTrMenu(e,systemid,parentid,filetype,filename,filesize,createtime,filetype_cn) { // tr右击
+    onContextTrMenu(e,systemid,parentid,filetype,filename,filesize,createtime,filetype_cn,location) { // tr右击
         let type = e._targetInst.type;
         let x = e.nativeEvent.screenX;
         let y = e.nativeEvent.screenY;
-        let trmenus = document.getElementById('trmenus');
+        let dustbinTrMenus = document.getElementById('dustbinTrMenus');
         if (type == 'tr' || type == 'td') {
             this.setState({
-                tbodyMenus:false,
-                trMenus: true,
+                dustbinTbodyMenus:false,
+                dustbinTrMenus: true,
                 systemid: systemid,
                 parentid: parentid,
                 filetype: filetype,
                 filename: filename,
                 filesize: filesize,
                 createtime: createtime,
-                filetype_cn: filetype_cn
+                filetype_cn: filetype_cn,
+                location: location
             })
             if (x + 185 <= document.body.clientWidth) {
-                trmenus.style.left = x + 5 + 'px';
-                trmenus.style.top = y - 100 + 'px';
+                dustbinTrMenus.style.left = x + 5 + 'px';
+                dustbinTrMenus.style.top = y - 100 + 'px';
             } else {
-                trmenus.style.left = document.body.clientWidth - 200 + 'px';
-                trmenus.style.top = y - 100 + 'px';
+                dustbinTrMenus.style.left = document.body.clientWidth - 200 + 'px';
+                dustbinTrMenus.style.top = y - 100 + 'px';
             }
             let tBody = this.tBody;
             let trs = tBody.getElementsByTagName('tr');
@@ -97,15 +94,15 @@ class Table extends Component {
     }
     // 刷新
     refresh() {
-        console.log("刷出")
-        this.props.initMyfiles(this.props.curParentid);
         this.setState({
-            tbodyMenus: false
+            dustbinTrMenus: false,
+            dustbinTbodyMenus: false,
         })
+        this.props.initDustbin();
     }
     onClickTr(e) {
         this.setState({
-            trMenus: false
+            dustbinTrMenus: false
         })
         let tBody = this.tBody;
         
@@ -116,77 +113,20 @@ class Table extends Component {
         }
         e.target.classList.add('active');
     }
-    // 复制文件
-    copyFile = () => {
-        console.log("复制了")
-        console.log(this.state)
-        this.setState({
-            trMenus: false,
-            copySystemid: this.state.systemid,
-            copyParentid: this.state.parentid
-        })
-        console.log(this.state)
-    }
-    // 粘贴文件
-    pasteFile = () => {
-        const {copySystemid, copyParentid} = this.state;
-            
-        this.props.pasteFile(copyParentid,copySystemid,curParentid);
-        this.setState({
-            trMenus: false
-        })
-        console.log(this.state)
-    }
-    // 打开重命名
-    renameFile = () => {
-        this.setState({
-            renameFlag: true,
-            trMenus: false
-        })
-    }
-    // 取消重命名
-    cancelRename = () => {
-        this.setState({
-            renameFlag: false
-        })
-    }
-    // 提交新的名字
-    handleNewName = (filename) => {
-        this.setState({
-            renameFlag: false
-        })
-        this.props.handleNewName(filename,this.state.systemid);
-    }
-    // 打开文件
-    onDoubleClick(filetype,systemid,filename) {
-        if (filetype == 0) {
-            this.props.initMyfiles(systemid,filename);
-        }
-    }
     // 删除文件
     deleteFile = () => {
         console.log("删除了")
         let systemid = this.state.systemid;
         this.setState({
-            trMenus: false
+            dustbinTrMenus: false
         })
         this.props.deleteFile(systemid);
-    }
-    // 剪切文件
-    shearFile = () => {
-        console.log("简介； ")
-        this.setState({
-            trMenus: false,
-            copySystemid: this.state.systemid,
-            copyParentid: this.state.parentid
-        })
-        this.props.shearFile();
     }
     // 查看属性
     showAttribute = () => {
         this.setState({
             attributeFlag: true,
-            trMenus: false,
+            dustbinTrMenus: false,
         })
     }
     // 关闭属性框
@@ -195,28 +135,23 @@ class Table extends Component {
             attributeFlag: false
         })
     }
-    // 新建文件夹
-    createFile = () => {
-        this.setState({
-            trMenus: false,
-        })
-        this.props.createFile();
-    }
-    // 上传文件
-    uploadFile = (params) => {
-        console.log("双床啦")
-        this.props.uploadFile(params);
-    }
-    // 下载文件
-    downloadFile = () => {
+    deleteDustbin = () => { // 彻底删除
         let systemid = this.state.systemid;
-        let filename = this.state.filename;
-        let filetype_cn = this.state.filetype_cn;
-        this.props.downloadFile(systemid,filename,filetype_cn);
+        this.setState({
+            dustbinTrMenus: false
+        })
+        this.props.deleteDustbin(systemid);
+    }
+    reductionDustbin = () => { // 还原
+        let systemid = this.state.systemid;
+        this.setState({
+            dustbinTrMenus: false
+        })
+        this.props.reductionDustbin(systemid);
     }
     render() {
-        let {columns,dataSource,location} = this.props;
-        let {tbodyMenus,trMenus,copySystemid,renameFlag,filename,attributeFlag,filetype,filesize,createtime} = this.state;
+        let {columns,dataSource} = this.props;
+        let {dustbinTbodyMenus,dustbinTrMenus,filename,attributeFlag,filetype,filesize,createtime,location} = this.state;
         console.log(this.state)
         return (
             <Fragment>
@@ -235,7 +170,7 @@ class Table extends Component {
                             Object.keys(dataSource).length?dataSource.map(item=>{
                                 return(
                                     <tr 
-                                        onContextMenu={(e)=>this.onContextTrMenu(e,item.systemid,item.parentid,item.filetype,item.filename,item.filesize,item.createtime,item.filetype_cn)} 
+                                        onContextMenu={(e)=>this.onContextTrMenu(e,item.systemid,item.parentid,item.filetype,item.filename,item.filesize,item.createtime,item.filetype_cn,item.location)} 
                                         onDoubleClick={()=>this.onDoubleClick(item.filetype,item.systemid,item.filename)} 
                                         onClick={(e)=>this.onClickTr(e)}
                                     >
@@ -263,32 +198,19 @@ class Table extends Component {
                                     <img src={common.nofile.default}></img>
                             </div>
                         }
-                        <TableMenus 
-                            tbodyMenus={tbodyMenus} 
+                        <DustbinTbodyMenus 
+                            dustbinTbodyMenus={dustbinTbodyMenus} 
                             refresh={()=>this.refresh()} 
-                            pasteFile={this.pasteFile} 
-                            copySystemid={copySystemid}
-                            showAttribute={this.showAttribute}
-                            createFile={this.createFile}
-                            uploadFile={this.uploadFile}
                         />
-                        <TableTrMenus 
-                            trMenus={trMenus} 
-                            copyFile={this.copyFile} 
-                            renameFile={this.renameFile} 
-                            deleteFile={this.deleteFile}
-                            shearFile={this.shearFile}
+                        <DustbinTrMenus
+                            refresh={()=>this.refresh()} 
+                            dustbinTrMenus={dustbinTrMenus}
+                            deleteDustbin={this.deleteDustbin}
                             showAttribute={this.showAttribute}
-                            downloadFile={this.downloadFile}
+                            reductionDustbin={this.reductionDustbin}
                         />
                     </tbody>
                 </table>
-                <Rename 
-                    renameFlag={renameFlag}
-                    cancelRename={this.cancelRename}
-                    filename={filename}
-                    handleNewName={this.handleNewName}
-                />
                 <Attribute 
                     attributeFlag={attributeFlag} 
                     cancelAttribute={this.cancelAttribute} 
@@ -303,4 +225,4 @@ class Table extends Component {
     }
 }
 
-export default Table;
+export default DustbinTable;

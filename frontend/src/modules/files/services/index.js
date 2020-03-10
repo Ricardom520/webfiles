@@ -29,3 +29,33 @@ export const createFileRequest = (params) => {
 export const uploadFileRequest = (params) => {
     return service.post('/api/myfiles/upload', {...params});
 }
+
+// 下载文件
+export const downloadFileRequest = (params) => {
+    return service.get('/api/myfiles/download', {params:params})
+}
+
+// 寻找文件
+export const findFileRequest = (params) => {
+    return service.post('/api/myfiles/find', {...params});
+}
+
+// 初始化垃圾箱
+export const initDustbinRequest = (params) => {
+    return service.get('/api/dustbin', {params: params})
+}
+
+// 彻底删除
+export const deleteDustbinRequest = (params) => {
+    return service.post('/api/dustbin/delete', {...params})
+}
+
+// 垃圾箱还原
+export const reductionDustbinRequest = (params) => {
+    return service.post('/api/dustbin/reduction', {...params})
+}
+
+// 搜索垃圾箱
+export const findDustFileRequest = (params) => {
+    return service.get('/api/dustbin/find', {params: params})
+}

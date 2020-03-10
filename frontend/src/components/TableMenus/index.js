@@ -11,29 +11,30 @@ class TableMenus extends Component {
         let filename = name.split('.')[0];
         let type = name.split('.')[1];
         let filetype;
+        console.log(type)
         switch (type) {
-            case type == 'jpg' || type == 'jpeg' || type == 'png' || type == 'gif' || type == 'webp' || type == 'svg': // 图片
+            case 'jpg' || 'jpeg' || 'png' || 'gif' || 'webp' ||  'svg': // 图片
                 filetype = 2;
                 break;
-            case type == 'xlsx': // excel表格
+            case 'xlsx': // excel表格
                 filetype = 7;
                 break;
-            case type == 'zip': // 压缩包
+            case 'zip': // 压缩包
                 filetype = 5;
                 break;
-            case type == 'docx' || type == 'doc': // word文档
+            case 'docx' || 'doc': // word文档
                 filetype = 1;
                 break;
-            case type == 'pdf': // pdf
+            case 'pdf': // pdf
                 filetype = 9;
                 break;
-            case type == 'ppt' || type == 'pptx': // ppt
+            case 'ppt' ||  'pptx': // ppt
                 filetype = 8;
                 break;
-            case type == 'cda' || type == 'wav' || type == 'mp3' || type == 'wma' || type == 'ra' || type == 'midi' || type == 'ogg' || type == 'ape' || type == 'flac' || type == 'aac':
+            case 'cda' || 'wav' || 'mp3' || 'wma' || 'ra' || 'midi' || 'ogg' || 'ape' || 'flac' || 'aac':
                 filetype = 3;
                 break;
-            case type == 'avi' || type == 'mpeg' || type == 'mpg' || type == 'dat' || type == 'ra' || type == 'rm' || type == 'mov' || type == 'qt' || type == 'asf' || type == 'wmv' || type == 'avi':
+            case 'avi' ||  'mpeg' ||  'mpg' || 'dat' || 'ra' || 'rm' || 'mov' || 'qt' || 'asf' || 'wmv' || 'avi':
                 filetype = 4;
                 break;
             default:
@@ -47,13 +48,13 @@ class TableMenus extends Component {
         let that = this;
         reader.onload = function() {
             //console.log(reader.result)
-            let params = Object.assign({filename:filename},{filetype:filetype},{filesize:filesize},{content:reader.result})
+            let params = Object.assign({filename:filename},{filetype:filetype},{filesize:filesize},{content:reader.result},{filetype_cn:type})
             that.props.uploadFile(params)
         }
         target.value = '';
     }
     render() {
-        const {tbodyMenus,refresh,pasteFile,copySystemid,showAttribute,createFile,uploadFile} = this.props;
+        const {tbodyMenus,refresh,pasteFile,copySystemid,showAttribute,createFile} = this.props;
         return (
             <div className="tablemenusContainer" style={tbodyMenus?{display:'block'}:{display:'none'}} id="tbodymenus">
                 <ul className="line">

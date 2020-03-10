@@ -28,12 +28,15 @@ class Attribute extends Component {
                             <li>
                                 <img src={
                                     filetype === 0 ? common.file.default :
-                                    filetype === 1 ? icon.file4.default :
+                                    filetype === 1 ? icon.word.default :
                                     filetype === 2 ? icon.photo.default :
                                     filetype === 3 ? icon.music.default :
                                     filetype === 4 ? icon.video.default :
                                     filetype === 5 ? icon.package.default :
-                                    filetype === 6 ? icon.file3.default : ''
+                                    filetype === 6 ? icon.file3.default : 
+                                    filetype === 7 ? icon.excel.default :
+                                    filetype === 8 ? icon.ppt.default :
+                                    filetype === 9 ? icon.pdf.default : ''
                                 }></img>
                                 <p>{filename}</p>
                             </li>
@@ -41,7 +44,18 @@ class Attribute extends Component {
                         <ul className="line">
                             <li>
                                 <span>文件类型:</span>
-                                <p>XLSL工作表</p>
+                                <p>{
+                                        filetype === 0 ? '文件夹' :
+                                        filetype === 1 ? 'word文档' :
+                                        filetype === 2 ? '图片' :
+                                        filetype === 3 ? '音乐' :
+                                        filetype === 4 ? '视频' :
+                                        filetype === 5 ? '压缩包' :
+                                        filetype === 6 ? '其他' :
+                                        filetype === 7 ? 'Excel工作表':
+                                        filetype === 8 ? 'PPT文档' :
+                                        filetype === 9 ? 'PDF文档' : ''
+                                    }</p>
                             </li>
                         </ul>
                         <ul className="line">

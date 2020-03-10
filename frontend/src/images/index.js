@@ -41,6 +41,7 @@ const icon = {
     ppt: require('./icon/ppt.png'),
     excel: require('./icon/excel.png'),
     pdf: require('./icon/PDF.png'),
+    reduction: require('./icon/reduction.png'),
 };
 
 const common= {
@@ -86,7 +87,8 @@ const common= {
     live1: require('./common/live1.webp'),
     male: require('./common/male.png'),
     female: require('./common/female.png'),
-    button: require('./common/button.png')
+    button: require('./common/button.png'),
+    nofile: require('./common/nofile.jpg'),
 }
 
 export {

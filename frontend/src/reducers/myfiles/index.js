@@ -9,7 +9,10 @@ let initState = {
             filename: '我的文档'
         }
     ],
-    hasShare: false
+    hasShare: false,
+    content: '',
+    backFile: [],
+    frontFile: [],
 }
 
 export default (state = initState, action) => {
@@ -174,6 +177,22 @@ export default (state = initState, action) => {
             } else {
                 state.myfilesData.push(action.payload);
             }
+            return {...state};
+        case actionTypes.DOWNLOAD_MYFILE:
+            state.content = action.payload;
+            return {...state};
+        case actionTypes.FINDDATA_MYFILE:
+            state.myfilesData = action.payload;
+            return {...state};
+        case actionTypes.BACKDATA_MYFILE:
+            state.backFile = state.fileLists.pop();
+            state.myfilesData = action.payload;
+            return {...state};
+        case actionTypes.FRONTDATA_MYFILE:
+            state.frontFile = state.backFile;
+            state.fileLists.push(state.backFile);
+            state.backFile = [];
+            state.myfilesData = action.payload;
             return {...state};
         default:
             return state;
