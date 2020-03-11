@@ -40,6 +40,20 @@ export const findFileRequest = (params) => {
     return service.post('/api/myfiles/find', {...params});
 }
 
+export const findFileFavourRequest = (params) => {
+    return service.post('/api/favourite/find', {...params});
+}
+
+// 添加收藏
+export const addToFavouriteRequest = (params) => {
+    return service.post('/api/myfiles/favour', {...params});
+}
+
+// 取消收藏
+export const cancelToMyfileRequest = (params) => {
+    return service.post('/api/favourite/cancel', {...params});
+}
+
 // 初始化垃圾箱
 export const initDustbinRequest = (params) => {
     return service.get('/api/dustbin', {params: params})
@@ -58,4 +72,9 @@ export const reductionDustbinRequest = (params) => {
 // 搜索垃圾箱
 export const findDustFileRequest = (params) => {
     return service.get('/api/dustbin/find', {params: params})
+}
+
+// 初始化收藏夹
+export const initFavouriteRequest = (params) => {
+    return service.get('/api/favourite',{params:params});
 }

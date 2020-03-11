@@ -15,6 +15,7 @@ import {
     findFile,
     backFile,
     frontFile,
+    addToFavourite,
 } from '../../models/files';
 import '../files.less';
 import {
@@ -27,15 +28,17 @@ class Myfiles extends Component {
         this.state = {
             myfilesData: [],
             location: '',
+            favorited: false,
         }
     }
     componentDidMount() {
         let {curParentid} = this.props.myfiles;
         this.initMyfiles(curParentid);
     }
-    initMyfiles = (parentid,filename) => {
+    initMyfiles = (parentid,filename,favour) => {
         let userid = sessionStorage.getItem('userid');
-        this.props.initMyfiles({userid: userid, parentid: parentid,filename:filename});
+        console.log(favour)
+        this.props.initMyfiles({userid: userid, parentid: parentid,filename:filename,favour:favour});
     }
     pasteFile = (copyParentid,copySystemid,curParentid) => { // 粘贴文件
         let userid = sessionStorage.getItem('userid');
@@ -146,6 +149,10 @@ class Myfiles extends Component {
             this.props.frontFile({userid:userid, parentid: this.props.myfiles.backFile.systemid})
         }
     }
+    addToFavourite = (systemid,filetype) => { // 收藏文件
+        let userid = sessionStorage.getItem('userid');
+        this.props.addToFavourite({userid:userid,systemid:systemid,filetype:filetype})
+    }
     componentWillReceiveProps(nextprops) {
         let location = '';
         let fileLists = this.props.myfiles.fileLists;
@@ -154,12 +161,14 @@ class Myfiles extends Component {
         }
         this.setState({
             location: location,
-            myfilesData: this.props.myfiles.myfilesData
+            myfilesData: this.props.myfiles.myfilesData,
+            favorited: this.props.myfiles.fileLists.slice(-1)[0].favour,
         })
+        console.log(this.props.myfiles.fileLists.slice(-1))
         console.log(nextprops)
     }
     render() {
-        let {myfilesData,location,content} = this.state;
+        let {myfilesData,location,content,favorited} = this.state;
         let {curParentid,fileLists} = this.props.myfiles;
         let columns  = [
             {
@@ -218,7 +227,7 @@ class Myfiles extends Component {
                             <img src={common.arrow.default}></img>
                         </div>
                         <div className='like right borderR'>
-                            <img src={common.favorites.default}></img>
+                            <img src={favorited?icon.favorited.default:icon.favorit.default}></img>
                         </div>
                     </div>
                     <div className='find'>
@@ -248,7 +257,7 @@ class Myfiles extends Component {
                         <Table 
                             columns={columns} 
                             dataSource={myfilesData} 
-                            initMyfiles={this.initMyfiles} 
+                            initData={this.initMyfiles} 
                             pasteFile={this.pasteFile}
                             curParentid={curParentid}
                             handleNewName={this.handleNewName}
@@ -259,6 +268,7 @@ class Myfiles extends Component {
                             uploadFile={this.uploadFile}
                             downloadFile={this.downloadFile}
                             content={content}
+                            addToFavourite={this.addToFavourite}
                         />
                     </div>
                 </div>
@@ -286,4 +296,5 @@ export default connect(mapStateToProps,{
                                         findFile,
                                         backFile,
                                         frontFile,
+                                        addToFavourite,
                                     })(withRouter(Myfiles));

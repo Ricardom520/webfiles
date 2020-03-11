@@ -4,13 +4,16 @@ import '../TableMenus/tablemenus.less';
 
 class TableMenus extends Component {
     render() {
-        let {trMenus,copyFile,renameFile,deleteFile,shearFile,showAttribute,downloadFile} = this.props;
+        let {trMenus,copyFile,renameFile,deleteFile,shearFile,showAttribute,downloadFile,addToFavourite,favour,cancelToMyfile} = this.props;
         console.log(trMenus)
         return (
             <div className="tablemenusContainer" style={trMenus?{display:'block'}:{display:'none'}} id="trmenus">
                 <ul className="line">
                     <li>
                         <img src={icon.open.default}></img>打开
+                    </li>
+                    <li onClick={favour?cancelToMyfile:addToFavourite}>
+                        <img src={icon.favorites2.default} style={{width: '16px'}}></img>{favour?'取消收藏':'收藏'}
                     </li>
                     <li onClick={downloadFile}>
                         <img src={icon.download.default}></img>下载

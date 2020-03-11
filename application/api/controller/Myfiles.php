@@ -12,7 +12,7 @@ class Myfiles extends Controller
         $data = $request->post();
         $userid = $data['userid'];
         $parentid = $data['parentid'];
-        $sql = 'Select systemid, userid, filename, filetype, filesize, parentid, createtime,filetype_hz from files where userid ="'.$userid.'" and parentid ="'.$parentid.'"';
+        $sql = 'Select systemid, userid, filename, filetype, filesize, parentid, createtime,filetype_hz, favour from files where userid ="'.$userid.'" and parentid ="'.$parentid.'"';
         $res = Db::query($sql);
         $this->mergeSort($res);
         for ($i = 0; $i <count($res); $i++) {
@@ -68,9 +68,9 @@ class Myfiles extends Controller
         $file = Db::query($SeSql);
         $currentData = date('Y-m-d H:i:s');
         $newSystemid = substr($userid,0,2).time().substr($systemid,-2);
-        $Insql = 'Insert into files (systemid,userid,parentid,filename,filetype,content,filesize,createtime,modifytime,username,filetype_hz) 
+        $Insql = 'Insert into files (systemid,userid,parentid,filename,filetype,content,filesize,createtime,modifytime,username,filetype_hz,favour) 
                     values("'.$newSystemid.'","'.$userid.'","'.$curParentid.'","'.$file[0]['filename'].'",'.$file[0]['filetype'].',"'.$file[0]['content'].'"
-                    ,"'.$file[0]['filesize'].'","'.$currentData.'","'.$currentData.'","'.$username.'","'.$file[0]['filetype_hz'].'")';
+                    ,"'.$file[0]['filesize'].'","'.$currentData.'","'.$currentData.'","'.$username.'","'.$file[0]['filetype_hz'].'","'.$file[0]['favour'].'")';
         Db::query($Insql);
         $file[0]['systemid'] = $newSystemid;
         $file[0]['parentid'] = $curParentid;
@@ -101,9 +101,9 @@ class Myfiles extends Controller
         $res = Db::query($SeSql);
 
         $currentData = date('Y-m-d H:i:s');
-        $Insql = 'Insert into dustbin (systemid, userid, username, filename, filesize, filetype, content, deletetime, location, filetype_hz, createtime) values (
+        $Insql = 'Insert into dustbin (systemid, userid, username, filename, filesize, filetype, content, deletetime, location, filetype_hz, createtime, favour) values (
                     "'.$systemid.'","'.$userid.'","'.$res[0]['username'].'","'.$res[0]['filename'].'",'.$res[0]['filesize'].','
-                    .$res[0]['filetype'].',"'.$res[0]['content'].'","'.$currentData.'","'.$location.'","'.$res[0]['filetype_hz'].'","'.$res[0]['createtime'].'")';
+                    .$res[0]['filetype'].',"'.$res[0]['content'].'","'.$currentData.'","'.$location.'","'.$res[0]['filetype_hz'].'","'.$res[0]['createtime'].'","'.$res[0]['favour'].'")';
         Db::query($Insql);
         $Delsql = 'Delete from files where systemid="'.$systemid.'" and userid="'.$userid.'"';
         $a = Db::query($Delsql);
@@ -194,6 +194,33 @@ class Myfiles extends Controller
         $sql = 'Select systemid, userid, filename, filetype, filesize, parentid, createtime,filetype_hz from files where userid ="'.$userid.'" and parentid ="'.$parentid.'" and LOCATE("'.$filename.'",filename) > 0';
         $res = Db::query($sql);
         return $res;
+    }
+
+    public function favour (Request $request)
+    {
+        header('Access-Control-Allow-Origin:*');
+        $data = $request->post();
+        $userid = $data['userid'];
+        $filetype = $data['filetype'];
+        $systemid = $data['systemid'];
+        $sql = 'Update files set favour= 1 where systemid="'.$systemid.'" and userid="'.$userid.'"';
+        Db::query($sql);
+        if ($filetype === 0) {
+            $SeSql = 'Select systemid, userid from files where userid="'.$userid.'" and parentid="'.$systemid.'"';
+            $res = Db::query($SeSql);
+            if ($res) {
+                $len = count($res);
+                for ($i = 0; $i < $len; $i++) {
+                    $sql = 'Update files set favour= 1 where systemid="'.$res[0]['systemid'].'" and userid="'.$userid.'"';
+                    Db::query($sql);
+                }
+            }
+        }
+        $arr = array(
+            'code'=>0,
+            'msg'=>'收藏成功'
+        );
+        return $arr;
     }
 
     private function mergeSort(&$arr) 

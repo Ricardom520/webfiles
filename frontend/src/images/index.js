@@ -21,6 +21,7 @@ const icon = {
     openFile: require('./icon/openFile.png'),
     copy: require('./icon/copy.png'),
     favorited: require('./icon/favorited.png'),
+    favorit: require('./icon/favorit.png'),
     find: require('./icon/find.png'),
     overlapping: require('./icon/overlapping.png'),
     setting: require('./icon/setting.png'),

@@ -8,10 +8,14 @@ import {
     createFileRequest,
     uploadFileRequest,
     findFileRequest,
+    findFileFavourRequest,
     initDustbinRequest,
     deleteDustbinRequest,
     reductionDustbinRequest,
     findDustFileRequest,
+    initFavouriteRequest,
+    addToFavouriteRequest,
+    cancelToMyfileRequest,
 } from '../services';
 
 export const initMyfiles = (params) => {
@@ -20,7 +24,7 @@ export const initMyfiles = (params) => {
         initMyfilesRequest(params)
             .then(res=>{
                 console.log(res)
-                dispatch({type: actionTypes.INITDATA_MYFILE,payload: {res:res,parentid:params.parentid,filename:params.filename}})
+                dispatch({type: actionTypes.INITDATA_MYFILE,payload: {res:res,parentid:params.parentid,filename:params.filename,favour:params.favour}})
             })
             .catch(error=>{
                 console.log(error)
@@ -63,6 +67,17 @@ export const toFile = (params) => {
             })
     }
 }
+
+export const toFileFavour = (params) => {
+    console.log(params)
+    return dispatch => {
+        initFavouriteRequest(params)
+            .then(res=>{
+                dispatch({type: actionTypes.TODATA_MYFILE,payload:{res:res,parentid:params.parentid,filename:params.filename}})
+            })
+    }
+}
+
 
 export const deleteFile = (params) => {
     return dispatch => {
@@ -123,10 +138,30 @@ export const findFile = (params) => {
     }
 }
 
+export const findFileFavour = (params) => {
+    return dispatch => {
+        findFileFavourRequest(params)
+            .then(res=> {
+                console.log(res)
+                dispatch({type: actionTypes.FINDDATA_FAVOUR,payload:res})
+            })
+    }
+}
+
 export const backFile = (params) => {
     return dispatch => {
         console.log(params)
         initMyfilesRequest(params)
+            .then(res=>{
+                dispatch({type: actionTypes.BACKDATA_MYFILE,payload:res})
+            })
+    }
+} 
+
+export const backFileFavour = (params) => {
+    return dispatch => {
+        console.log(params)
+        initFavouriteRequest(params)
             .then(res=>{
                 dispatch({type: actionTypes.BACKDATA_MYFILE,payload:res})
             })
@@ -141,6 +176,34 @@ export const frontFile = (params) => {
                 dispatch({type: actionTypes.FRONTDATA_MYFILE,payload:res})
             })
     } 
+}
+
+export const addToFavourite = (params) => {
+    return dispatch => {
+        addToFavouriteRequest(params)
+            .then(res=>{
+                console.log(params)
+                console.log(res)
+                if (res.code === 0) {
+                    message.success(res.msg);
+                }
+                dispatch({type: actionTypes.ADDFAVOURDATA_MYFILE,payload: params})
+            })
+    }
+}
+
+export const cancelToMyfile = (params) => {
+    return dispatch => {
+        cancelToMyfileRequest(params)
+            .then(res=>{
+                console.log(res);
+                console.log(params)
+                dispatch({type: actionTypes.CENCELFAVOURDATA_FAVOUR, payload: params});
+            })
+            .catch(error=>{
+                console.log(error)
+            })
+    }
 }
 
 export const initDustbin = (params) => {
@@ -192,6 +255,19 @@ export const findDustFile = (params) => {
             })
             .catch(error=>{
                 console.log(error);
+            })
+    }
+}
+
+export const initFavourite = (params) => {
+    return dispatch => {
+        initFavouriteRequest(params)
+            .then(res=>{
+                console.log(res)
+                dispatch({type: actionTypes.INITDATA_FAVOURITE, payload:{res:res,parentid:params.parentid,filename:params.filename,favour:params.favour}})
+            })
+            .catch(error=>{
+                console.log(error)
             })
     }
 }

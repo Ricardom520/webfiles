@@ -18,6 +18,16 @@ class Menus extends Component {
             parentid: 'myfile'
         }
     }
+    componentDidMount() {
+        console.log(this.props.location)
+        let name = this.props.location.pathname.split('/')[3];
+        console.log(name)
+        if (name) {
+            let target = document.getElementById(name);
+            target.classList.add('active');
+        }
+        console.log(document.getElementById('myfile'))
+    }
     onContextMenu(e) {
         console.log(e.target.classList)
         let lis = this.right2.getElementsByTagName('li');
@@ -204,7 +214,7 @@ class Menus extends Component {
                             收藏夹
                             <Frame listsData={base1}/>
                         </li>
-                        <li onContextMenu={(e)=>this.onContextMenu(e)} id="myFiles" onClick={(e)=>this.ContextRight2Click(e,'myfile')} onDoubleClick={()=>this.initMenus()}>
+                        <li onContextMenu={(e)=>this.onContextMenu(e)} id="myfile" onClick={(e)=>this.ContextRight2Click(e,'myfile')} onDoubleClick={()=>this.initMenus()}>
                             <img src={icon.house.default}></img>
                             我的文档
                             <Frame listsData={base2}/>
@@ -225,48 +235,48 @@ class Menus extends Component {
                             工具
                             <Frame listsData={base1}/>
                         </p>
-                        <li onContextMenu={(e)=>this.onContextMenu(e)} id="nearFile" onClick={(e)=>this.ContextRight2Click(e,'nearfile')}>
+                        <li onContextMenu={(e)=>this.onContextMenu(e)} id="nearfile" onClick={(e)=>this.ContextRight2Click(e,'nearfile')}>
                             <img src={icon.time.default}></img>
                             最近文档
                             <Frame listsData={base3}/>
                         </li>
-                        <li onContextMenu={(e)=>this.onContextMenu(e)} id="myShare" onClick={(e)=>this.ContextRight2Click(e,'myshare')}>
+                        <li onContextMenu={(e)=>this.onContextMenu(e)} id="myshare" onClick={(e)=>this.ContextRight2Click(e,'myshare')}>
                             <img src={icon.link.default}></img>
                             我的分享
                             <Frame listsData={base3}/>
                         </li>
-                        <li onContextMenu={(e)=>this.onContextMenu(e)} id="recycle" onClick={(e)=>this.ContextRight2Click(e,'dustbin')}>
+                        <li onContextMenu={(e)=>this.onContextMenu(e)} id="dustbin" onClick={(e)=>this.ContextRight2Click(e,'dustbin')}>
                             <img src={icon.dustbin.default}></img>
                             回收站
                             <Frame listsData={base4}/>
                         </li>
                     </ul>
                     <ul className="fileTypesLists">
-                        <p onContextMenu={(e)=>this.onContextMenu(e)} id="fileTypes" style={{cursor:'pointer',position: 'relative'}} onClick={(e)=>this.ContextRight2PClick(e,'filetype')}>
+                        <p onContextMenu={(e)=>this.onContextMenu(e)} id="filetype" style={{cursor:'pointer',position: 'relative'}} onClick={(e)=>this.ContextRight2PClick(e,'filetype')}>
                             文件类型
                             <Frame listsData={base1}/>
                         </p>
-                        <li onContextMenu={(e)=>this.onContextMenu(e)} id="files" onClick={(e)=>this.ContextRight2Click(e,'file')}>
+                        <li onContextMenu={(e)=>this.onContextMenu(e)} id="file" onClick={(e)=>this.ContextRight2Click(e,'file')}>
                             <img src={icon.file4.default}></img>
                             文档
                             <Frame listsData={base3}/>
                         </li>
-                        <li onContextMenu={(e)=>this.onContextMenu(e)} id="photos" onClick={(e)=>this.ContextRight2Click(e,'photo')}>
+                        <li onContextMenu={(e)=>this.onContextMenu(e)} id="photo" onClick={(e)=>this.ContextRight2Click(e,'photo')}>
                             <img src={icon.photo.default}></img>
                             图片
                             <Frame listsData={base3}/>
                         </li>
-                        <li onContextMenu={(e)=>this.onContextMenu(e)} id="musics" onClick={(e)=>this.ContextRight2Click(e,'music')}>
+                        <li onContextMenu={(e)=>this.onContextMenu(e)} id="music" onClick={(e)=>this.ContextRight2Click(e,'music')}>
                             <img src={icon.music.default}></img>
                             音乐
                             <Frame listsData={base3}/>
                         </li>
-                        <li onContextMenu={(e)=>this.onContextMenu(e)} id="videos" onClick={(e)=>this.ContextRight2Click(e,'video')}>
+                        <li onContextMenu={(e)=>this.onContextMenu(e)} id="video" onClick={(e)=>this.ContextRight2Click(e,'video')}>
                             <img src={icon.video.default}></img>
                             视频
                             <Frame listsData={base3}/>
                         </li>
-                        <li onContextMenu={(e)=>this.onContextMenu(e)} id="packages" onClick={(e)=>this.ContextRight2Click(e,'package')}>
+                        <li onContextMenu={(e)=>this.onContextMenu(e)} id="package" onClick={(e)=>this.ContextRight2Click(e,'package')}>
                             <img src={icon.package.default}></img>
                             压缩包
                             <Frame listsData={base3}/>

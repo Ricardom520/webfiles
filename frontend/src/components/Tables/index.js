@@ -98,7 +98,7 @@ class Table extends Component {
     // 刷新
     refresh() {
         console.log("刷出")
-        this.props.initMyfiles(this.props.curParentid);
+        this.props.initData(this.props.curParentid);
         this.setState({
             tbodyMenus: false
         })
@@ -158,9 +158,9 @@ class Table extends Component {
         this.props.handleNewName(filename,this.state.systemid);
     }
     // 打开文件
-    onDoubleClick(filetype,systemid,filename) {
+    onDoubleClick(filetype,systemid,filename,favour) {
         if (filetype == 0) {
-            this.props.initMyfiles(systemid,filename);
+            this.props.initData(systemid,filename,favour);
         }
     }
     // 删除文件
@@ -214,8 +214,26 @@ class Table extends Component {
         let filetype_cn = this.state.filetype_cn;
         this.props.downloadFile(systemid,filename,filetype_cn);
     }
+    // 添加到收藏夹
+    addToFavourite = () => {
+        let systemid = this.state.systemid;
+        let filetype = this.state.filetype;
+        this.setState({
+            trMenus: false,
+        })
+        this.props.addToFavourite(systemid,filetype);
+    }
+    // 取消收藏
+    cancelToMyfile = () => {
+        let systemid = this.state.systemid;
+        let filetype = this.state.filetype;
+        this.setState({
+            trMenus: false,
+        })
+        this.props.cancelToMyfile(systemid,filetype);
+    }
     render() {
-        let {columns,dataSource,location} = this.props;
+        let {columns,dataSource,location,favour} = this.props;
         let {tbodyMenus,trMenus,copySystemid,renameFlag,filename,attributeFlag,filetype,filesize,createtime} = this.state;
         console.log(this.state)
         return (
@@ -236,7 +254,7 @@ class Table extends Component {
                                 return(
                                     <tr 
                                         onContextMenu={(e)=>this.onContextTrMenu(e,item.systemid,item.parentid,item.filetype,item.filename,item.filesize,item.createtime,item.filetype_cn)} 
-                                        onDoubleClick={()=>this.onDoubleClick(item.filetype,item.systemid,item.filename)} 
+                                        onDoubleClick={()=>this.onDoubleClick(item.filetype,item.systemid,item.filename,item.favour)} 
                                         onClick={(e)=>this.onClickTr(e)}
                                     >
                                         {
@@ -280,6 +298,9 @@ class Table extends Component {
                             shearFile={this.shearFile}
                             showAttribute={this.showAttribute}
                             downloadFile={this.downloadFile}
+                            addToFavourite={this.addToFavourite}
+                            favour={favour}
+                            cancelToMyfile={this.cancelToMyfile}
                         />
                     </tbody>
                 </table>
