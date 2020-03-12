@@ -48,13 +48,13 @@ class TableMenus extends Component {
         let that = this;
         reader.onload = function() {
             //console.log(reader.result)
-            let params = Object.assign({filename:filename},{filetype:filetype},{filesize:filesize},{content:reader.result},{filetype_cn:type})
+            let params = Object.assign({filename:filename},{filetype:filetype},{filesize:filesize},{content:reader.result},{filetype_hz:type})
             that.props.uploadFile(params)
         }
         target.value = '';
     }
     render() {
-        const {tbodyMenus,refresh,pasteFile,copySystemid,showAttribute,createFile} = this.props;
+        const {tbodyMenus,refresh,pasteFile,copySystemid,showAttribute,createFile,file} = this.props;
         return (
             <div className="tablemenusContainer" style={tbodyMenus?{display:'block'}:{display:'none'}} id="tbodymenus">
                 <ul className="line">
@@ -62,21 +62,21 @@ class TableMenus extends Component {
                         <img src={icon.refresh.default}></img>刷新
                     </li>
                 </ul>
-                <ul className="line">
+                <ul className="line" style={file?{display:'none'}:{display:'block'}}>
                     <li>
-                        <label for="file">
+                        <label for="file1">
                             <img src={common.arrow2.default}></img>上传文件
                         </label>
-                        <input type="file" id="file" style={{display:'none'}} onChange={(e)=>this.uploadFile(e)}></input>
+                        <input type="file" id="file1" style={{display:'none'}} onChange={(e)=>this.uploadFile(e)}></input>
                     </li>
                     <li onClick={createFile}>
                         <img src={common.file.default}></img>新建文件夹
                     </li>
+                </ul>
+                <ul className="line">
                     <li onClick={pasteFile} style={copySystemid?{display: 'block'}: {display: 'none'}}>
                         <img src={icon.paste.default}></img>粘贴
                     </li>
-                </ul>
-                <ul className="line">
                     <li>
                         <img src={icon.watch.default}></img>查看
                     </li>

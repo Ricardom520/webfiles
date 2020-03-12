@@ -161,6 +161,41 @@ class Myfiles extends Controller
             .$filetype.',"'.$content.'","'.$currentData.'","'.$filetype_hz.'")';
         Db::query($Insql);
         $filesize = round(($filesize / 1024),2).'KB';
+        switch($filetype) {
+            case 0:
+                $filetype_cn = '文件夹';
+                break;
+            case 1:
+                $filetype_cn = 'WORD';
+                break;
+            case 2:
+                $filetype_cn = '图片';
+                break;
+            case 3:
+                $filetype_cn = '音乐';
+                break;
+            case 4:
+                $filetype_cn = '视频';
+                break;
+            case 5:
+                $filetype_cn = '压缩包';
+                break;
+            case 6:
+                $filetype_cn = '其他';
+                break;
+            case 7:
+                $filetype_cn = 'EXCEL';
+                break;
+            case 8:
+                $filetype_cn = 'PPT';
+                break;
+            case 9:
+                $filetype_cn = 'PDF';
+                break;
+            default:
+                $filetype_cn = '其他';
+                break;
+        };
         $arr = array(
             'filename'=>$filename,
             'filesize'=>$filesize,
@@ -169,6 +204,7 @@ class Myfiles extends Controller
             'parentid'=>$parentid,
             'username'=>$username,
             'systemid'=>$systemid,
+            'filetype_cn'=>$filetype_cn,
         );
         return $arr;
     }

@@ -2,9 +2,14 @@ import React , { Component, Fragment } from 'react';
 import TableMenus from '../TableMenus';
 import TableTrMenus from '../TableTrMenus';
 import Rename from '../Rename';
+import Photo from './photo';
 import Attribute from '../Attribute';
 import { icon, common } from '../../images';
 import './table.less';
+import {
+    downloadFileRequest
+} from '../../modules/files/services';
+import { message } from 'antd';
 
 class Table extends Component {
     constructor(props) {
@@ -22,7 +27,9 @@ class Table extends Component {
             copyParentid: '',
             renameFlag: false,
             attributeFlag: false,
-            filetype_cn: ''
+            filetype_cn: '',
+            photoFlag: false,
+            photo: '',
         }
     }
     onClickTbody(e) {
@@ -159,8 +166,50 @@ class Table extends Component {
     }
     // 打开文件
     onDoubleClick(filetype,systemid,filename,favour) {
+        let userid = sessionStorage.getItem('userid');
+        let params = Object.assign({userid:userid,systemid:systemid});
         if (filetype == 0) {
             this.props.initData(systemid,filename,favour);
+        }
+        if (filetype == 9) {
+            downloadFileRequest(params)
+                .then(res=>{
+                    window.open('/#/pdf?data='+res.content, '_blank');
+                })
+        }
+        if (filetype == 1 || filetype == 5 || filetype == 6 || filetype == 7 || filetype == 8) {
+            message.warning("该格式暂不支持在线浏览");
+            return;
+        }
+        if (filetype == 2) {
+            downloadFileRequest(params)
+                .then(res=>{
+                    this.setState({
+                        photoFlag: true,
+                        photo: res.content
+                    })
+                })
+        }
+    }
+    openFile = (filetype,systemid,filename,favour) => {
+        let userid = sessionStorage.getItem('userid');
+        let params = Object.assign({userid:userid,systemid:systemid});
+        if (filetype == 0) {
+            this.props.initData(systemid,filename,favour);
+        }
+        if (filetype == 9) {
+            downloadFileRequest(params)
+                .then(res=>{
+                    let dataURL = res.content;
+                    let iframe = document.createElement('iframe');
+                    iframe.name = "test";
+                    iframe.src = dataURL;
+                    window.open('/#/pdf?data='+res.content, '_blank');
+                })
+        }
+        if (filetype == 1 || filetype == 5 || filetype == 6 || filetype == 7 || filetype == 8) {
+            message.warning("该格式暂不支持在线浏览");
+            return;
         }
     }
     // 删除文件
@@ -232,9 +281,16 @@ class Table extends Component {
         })
         this.props.cancelToMyfile(systemid,filetype);
     }
+    // 关闭图片框
+    closePhoto = () => {
+        this.setState({
+            photoFlag: false,
+            photo: ''
+        })
+    }
     render() {
-        let {columns,dataSource,location,favour} = this.props;
-        let {tbodyMenus,trMenus,copySystemid,renameFlag,filename,attributeFlag,filetype,filesize,createtime} = this.state;
+        let {columns,dataSource,location,favour,file} = this.props;
+        let {tbodyMenus,trMenus,copySystemid,renameFlag,filename,attributeFlag,filetype,filesize,createtime,systemid} = this.state;
         console.log(this.state)
         return (
             <Fragment>
@@ -289,8 +345,12 @@ class Table extends Component {
                             showAttribute={this.showAttribute}
                             createFile={this.createFile}
                             uploadFile={this.uploadFile}
+                            file={file}
                         />
                         <TableTrMenus 
+                            filetype={filetype}
+                            systemid={systemid}
+                            filename={filename}
                             trMenus={trMenus} 
                             copyFile={this.copyFile} 
                             renameFile={this.renameFile} 
@@ -301,6 +361,8 @@ class Table extends Component {
                             addToFavourite={this.addToFavourite}
                             favour={favour}
                             cancelToMyfile={this.cancelToMyfile}
+                            file={file}
+                            openFile={this.openFile}
                         />
                     </tbody>
                 </table>
@@ -319,6 +381,7 @@ class Table extends Component {
                     createtime={createtime}
                     location={location}
                 />
+                <Photo photoFlag={this.state.photoFlag} photo={this.state.photo} closePhoto={this.closePhoto}/>
             </Fragment>
         )
     }

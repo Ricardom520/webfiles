@@ -16,6 +16,8 @@ import {
     initFavouriteRequest,
     addToFavouriteRequest,
     cancelToMyfileRequest,
+    initFileRequest,
+    findFileFileRequest,
 } from '../services';
 
 export const initMyfiles = (params) => {
@@ -80,6 +82,7 @@ export const toFileFavour = (params) => {
 
 
 export const deleteFile = (params) => {
+    console.log(params)
     return dispatch => {
         console.log(params)
         deleteFileRequest(params)
@@ -268,6 +271,29 @@ export const initFavourite = (params) => {
             })
             .catch(error=>{
                 console.log(error)
+            })
+    }
+}
+
+export const initFile = (params) => {
+    return dispatch => {
+        initFileRequest(params)
+            .then(res=>{
+                console.log(res)
+                dispatch({type: actionTypes.INITDATA_FILE, payload: res})
+            })
+    }
+}
+
+export const findFileFile = (params) => {
+    return dispatch => {
+        findFileFileRequest(params)
+            .then(res=>{
+                console.log(res)
+                dispatch({type: actionTypes.FINDDATA_FILE, payload: res})
+            })
+            .catch(error=>{
+                console.log(error);
             })
     }
 }

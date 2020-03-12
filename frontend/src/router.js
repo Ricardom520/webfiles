@@ -78,6 +78,18 @@ const Software = Loadable({
     delay: 100
 });
 
+const Test = Loadable({
+  loader: ()=>import('./test'),
+  loading: LoadingComponent,
+    delay: 100
+})
+
+const Pdf = Loadable({
+  loader: ()=>import('./modules/PDF'),
+  loading: LoadingComponent,
+    delay: 100
+})
+
 class Routers extends React.Component {
 
   render () {
@@ -94,6 +106,8 @@ class Routers extends React.Component {
             <Route path="/live" component={Live}/>
             <Route path="/self" component={Self}/>
             <Route path="/admin" component={Admin}/>
+            <Route path="/pdf" component={Pdf}/>
+            <Route path="/test" component={Test}/>
             <Redirect from="/*" to="/explorer"/>
         </Switch>
       </Router>

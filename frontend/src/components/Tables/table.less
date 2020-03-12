@@ -68,3 +68,32 @@
         }
     }
 }
+
+.PhotoContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 99.8%;
+    height: 100%;
+    background-color: rgba(103,99,99,0.8);
+
+    .close {
+        position: absolute;
+        right: 10px;
+        font-size: 30px;
+        color: #CAC7C7;
+        transform: rotate(45deg);
+    }
+    .close:hover {
+        cursor: pointer;
+    }
+
+    img {
+        position: absolute;
+        width: 800px;
+        height: 500px;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-400px) translateY(-250px); 
+    }
+}

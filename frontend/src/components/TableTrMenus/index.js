@@ -4,12 +4,12 @@ import '../TableMenus/tablemenus.less';
 
 class TableMenus extends Component {
     render() {
-        let {trMenus,copyFile,renameFile,deleteFile,shearFile,showAttribute,downloadFile,addToFavourite,favour,cancelToMyfile} = this.props;
+        let {trMenus,copyFile,renameFile,deleteFile,shearFile,showAttribute,downloadFile,addToFavourite,favour,cancelToMyfile,file,openFile,systemid,filetype,filename} = this.props;
         console.log(trMenus)
         return (
             <div className="tablemenusContainer" style={trMenus?{display:'block'}:{display:'none'}} id="trmenus">
                 <ul className="line">
-                    <li>
+                    <li onClick={()=>openFile(filetype,systemid,filename,favour)}>
                         <img src={icon.open.default}></img>打开
                     </li>
                     <li onClick={favour?cancelToMyfile:addToFavourite}>
@@ -23,16 +23,16 @@ class TableMenus extends Component {
                     </li>
                 </ul>
                 <ul className="line">
-                    <li onClick={copyFile}>
+                    <li onClick={copyFile} style={file?{display:'none'}:{display:'block'}}>
                         <img src={icon.copy.default}></img>复制
                     </li>
-                    <li onClick={shearFile}>
+                    <li onClick={shearFile} style={file?{display:'none'}:{display:'block'}}>
                         <img src={icon.shear.default}></img>剪切
                     </li>
                     <li onClick={renameFile}>
                         <img src={icon.rename.default}></img>重命名
                     </li>
-                    <li onClick={deleteFile}>
+                    <li onClick={deleteFile} style={file?{display:'none'}:{display:'block'}}>
                         <img src={icon.dustbin.default}></img>删除
                     </li>
                 </ul>

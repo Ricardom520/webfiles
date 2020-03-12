@@ -78,3 +78,13 @@ export const findDustFileRequest = (params) => {
 export const initFavouriteRequest = (params) => {
     return service.get('/api/favourite',{params:params});
 }
+
+// 初始化文件数据
+export const initFileRequest = (params) => {
+    return service.get('/api/file', {params:params})
+}
+
+// 搜索文件数据
+export const findFileFileRequest = (params) => {
+    return service.get('/api/file/find', {params: params});
+}

@@ -2,7 +2,6 @@ import Myfiles from './subpages/myfiles';
 import Position from './subpages/position';
 import Favour from './subpages/favorite';
 import Tool from './subpages/Tool';
-import Nearfile from './subpages/nearfiles';
 import Myshare from './subpages/myshare';
 import Dustbin from './subpages/dustbin';
 import Filetype from './subpages/filetype';
@@ -18,7 +17,6 @@ export default {
     Position,
     Favour,
     Tool,
-    Nearfile,
     Myshare,
     Dustbin,
     Filetype,

@@ -6,7 +6,6 @@ import Files from '../../files/views';
 import Editor from '../../editor/views';
 import './menus.less';
 import { icon, common } from '../../../images/index';
-import Myfiles from '../../files/views/subpages/myfiles';
 import {
     initMyfie
 } from '../models/menus';
@@ -235,11 +234,6 @@ class Menus extends Component {
                             工具
                             <Frame listsData={base1}/>
                         </p>
-                        <li onContextMenu={(e)=>this.onContextMenu(e)} id="nearfile" onClick={(e)=>this.ContextRight2Click(e,'nearfile')}>
-                            <img src={icon.time.default}></img>
-                            最近文档
-                            <Frame listsData={base3}/>
-                        </li>
                         <li onContextMenu={(e)=>this.onContextMenu(e)} id="myshare" onClick={(e)=>this.ContextRight2Click(e,'myshare')}>
                             <img src={icon.link.default}></img>
                             我的分享
@@ -295,7 +289,6 @@ class Menus extends Component {
                             <Route path="/explorer/files/favorite" component={Files.Favour}/>
                             <Route path="/explorer/files/myfile" component={Files.Myfiles}/>
                             <Route path="/explorer/files/tool" component={Files.Tool}/>
-                            <Route path="/explorer/files/nearfile" component={Files.Nearfile}/>
                             <Route path="/explorer/files/myshare" component={Files.Myshare}/>
                             <Route path="/explorer/files/dustbin" component={Files.Dustbin}/>
                             <Route path="/explorer/files/filetype" component={Files.Filetype}/>
