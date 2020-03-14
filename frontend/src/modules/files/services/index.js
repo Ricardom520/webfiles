@@ -88,3 +88,18 @@ export const initFileRequest = (params) => {
 export const findFileFileRequest = (params) => {
     return service.get('/api/file/find', {params: params});
 }
+
+// 分享文件
+export const shareFileRequest = (params) => {
+    return service.post('/api/myfiles/share', {...params})
+}
+
+// 初始化我的分享
+export const initMysharesRequest = (params) => {
+    return service.get('/api/share', {params:params});
+}
+
+// 取消我的分享
+export const cancelShareRequest = (params) => {
+    return service.post('/api/share/cancel', {...params})
+}

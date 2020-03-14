@@ -16,10 +16,10 @@ class ContentS extends Component {
                         </p>
                         <p style={{position: 'relative', bottom: '-45px'}}>
                             <span>{time}</span>
-                            <span>{fav}人收藏</span>
+                            <span className="right">{fav}人收藏</span>
                         </p>
                         <p style={{position: 'relative', bottom: '-35px'}}>
-                            <span>by {writer}</span><span>{like}点赞</span>
+                            <span>by {writer}</span><span className="right">{like}点赞</span>
                         </p>
                     </div>
                 </Link>

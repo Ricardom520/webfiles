@@ -3,6 +3,12 @@ import { icon, common } from '../../images';
 import './tablemenus.less';
 
 class TableMenus extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            sortFlag: false
+        }
+    }
     uploadFile(e) {
         let target = document.getElementById('file');
         let file = e.target.files[0];
@@ -53,8 +59,19 @@ class TableMenus extends Component {
         }
         target.value = '';
     }
+    ShowsortWays(e) {
+        console.log(e.target)
+        this.setState({
+            sortFlag: true
+        })
+    }
+    HidesortWays(e) {
+        this.setState({
+            sortFlag: false
+        })
+    }
     render() {
-        const {tbodyMenus,refresh,pasteFile,copySystemid,showAttribute,createFile,file} = this.props;
+        const {tbodyMenus,refresh,pasteFile,copySystemid,showAttribute,createFile,file,changeSort,share} = this.props;
         return (
             <div className="tablemenusContainer" style={tbodyMenus?{display:'block'}:{display:'none'}} id="tbodymenus">
                 <ul className="line">
@@ -62,14 +79,14 @@ class TableMenus extends Component {
                         <img src={icon.refresh.default}></img>刷新
                     </li>
                 </ul>
-                <ul className="line" style={file?{display:'none'}:{display:'block'}}>
+                <ul className="line" style={file?{display:'none'}:share?{display: 'none'}:{display:'block'}}>
                     <li>
                         <label for="file1">
                             <img src={common.arrow2.default}></img>上传文件
                         </label>
                         <input type="file" id="file1" style={{display:'none'}} onChange={(e)=>this.uploadFile(e)}></input>
                     </li>
-                    <li onClick={createFile}>
+                    <li onClick={createFile} style={share?{display:'none'}:{display:'block'}}>
                         <img src={common.file.default}></img>新建文件夹
                     </li>
                 </ul>
@@ -77,11 +94,12 @@ class TableMenus extends Component {
                     <li onClick={pasteFile} style={copySystemid?{display: 'block'}: {display: 'none'}}>
                         <img src={icon.paste.default}></img>粘贴
                     </li>
-                    <li>
-                        <img src={icon.watch.default}></img>查看
-                    </li>
-                    <li>
+                    <li className="arrow" onMouseEnter={(e)=>this.ShowsortWays(e)} onMouseLeave={(e)=>this.HidesortWays(e)}>
                         <img src={icon.sort.default}></img>排序方式
+                        <ul style={this.state.sortFlag?{display:'block'}:{display:'none'}}>
+                            <li onClick={()=>changeSort(0)}>详细信息</li>
+                            <li onClick={()=>changeSort(1)}>小图标</li>
+                        </ul>
                     </li>
                 </ul>
                 <ul>

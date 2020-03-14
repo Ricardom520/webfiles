@@ -259,6 +259,33 @@ class Myfiles extends Controller
         return $arr;
     }
 
+    public function share(Request $request)
+    {
+        header('Access-Control-Allow-Origin: *');
+        $data = $request->post();
+        $userid = $data['userid'];
+        $systemid = $data['systemid'];
+        $filename = $data['filename'];
+        $filetype = $data['filetype'];
+        $disc = $data['disc'];
+        $bc = $data['bc'];
+        $sharetime = date('Y-m-d H:i:s');
+        $Upsql = 'Update files set share = 1, sharetime="'.$sharetime.'" where userid = "'.$userid.'" and systemid="'.$systemid.'"';
+        Db::query($Upsql);
+        $shareid = 'S'.substr($userid,0,2).time().substr($systemid,-2);
+        $sql = 'select * from files f inner join users u on f.userid = u.userid where f.systemid="'.$systemid.'" and f.userid="'.$userid.'"';
+        $res = Db::query($sql);
+        $Insql = 'Insert into shares (shareid,userid,systemid,filename,filetype,content,nc,username,sharetime,disc,bc) values 
+                ("'.$shareid.'","'.$userid.'","'.$systemid.'","'.$filename.'","'.$filetype.'","'.$res[0]['content'].'","'
+                .$res[0]['nc'].'","'.$res[0]['username'].'","'.$sharetime.'","'.$disc.'","'.$bc.'")';
+        Db::query($Insql);
+        $arr = array(
+            'code'=>0,
+            'msg'=>"分享成功"
+        );
+        return $arr;
+    }
+
     private function mergeSort(&$arr) 
     {
         $len = count($arr);

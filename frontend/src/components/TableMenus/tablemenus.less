@@ -21,6 +21,29 @@
             cursor: pointer;
             background-color: #E1E1E1;
         }
+        li.arrow {
+            position: relative;
+            ul {
+                position: absolute;
+                top: 10px;
+                left: 185px;
+                width: 185px;
+                border: 1px solid #DDDDDD;
+                box-shadow: 1px 1px 10px #D8D8D8;
+                background-color: #fff;
+            }
+        }
+        li.arrow::after {
+            position: absolute;
+            content: ' ';
+            right: 10px;
+            top: 10px;
+            width: 0;
+            height: 0;
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent transparent #808486;
+        }
     }
     ul.line {
         border-bottom: 1px solid #EEEEEE;

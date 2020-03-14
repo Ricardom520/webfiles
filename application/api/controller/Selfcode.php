@@ -117,5 +117,15 @@ class Selfcode extends Controller
         );
         return $arr;
     }
+
+    public function photo (Request $request)
+    {
+        header('Access-Control-Allow-Origin: *');
+        $data = $request->get();
+        $userid = $data['userid'];
+        $sql = 'Select photo from users where userid="'.$userid.'"';
+        $res = Db::query($sql);
+        return $res;
+    }
 }
 ?>

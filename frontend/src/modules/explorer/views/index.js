@@ -7,13 +7,17 @@ import MenuSelf from './subpages/menuself/views';
 import Files from '../../files/views';
 import Editor from '../../editor/views';
 import './explorer.less';
+import {
+    initSelfPhoto
+} from '../models/explorer';
 
 class Explorer extends Component {
     constructor(props) {
         super(props)
         this.state = {
             visible: true,
-            username: ''
+            username: '',
+            photo: ''
         }
     }
     componentDidMount() {
@@ -39,6 +43,11 @@ class Explorer extends Component {
                 lis[1].className = 'active';
                 break;
         }
+        this.initSelfPhoto();
+    }
+    initSelfPhoto = () => {
+        let userid = sessionStorage.getItem('userid');
+        this.props.initSelfPhoto({userid:userid});
     }
     onClick(ele) {
         console.log(ele)
@@ -62,8 +71,14 @@ class Explorer extends Component {
             visible: !visible
         })
     }
+    componentWillReceiveProps(nextProps) {
+        console.log(this.props)
+        this.setState({
+            photo: this.props.explorers.photo
+        })
+    }
     render() {
-        const {visible,username} = this.state;
+        const {visible,username,photo} = this.state;
         console.log(visible)
         return (
             <div className='Explorer'>
@@ -91,13 +106,13 @@ class Explorer extends Component {
                                 <img src={common.flag.default}></img>
                             </p>
                             <p>
-                                <img src={common.self.default} className='selfPhoto' onClick={()=>this.showMenus()}></img>
+                                <img src={photo} className='selfPhoto' onClick={()=>this.showMenus()}></img>
                             </p>
                         </div>
                         <ul className="selfMenus" style={visible?{display: 'none'}:{display: 'block'}}>
                                 <li>
                                     <p className="p1">
-                                        <img src={common.self.default} className="selfPhoto1"></img>
+                                        <img src={photo} className="selfPhoto1"></img>
                                         <div>
                                             <h5>{username}</h5>
                                             <p>balala</p>
@@ -170,4 +185,12 @@ class Explorer extends Component {
     }
 }
 
-export default connect()(withRouter(Explorer));
+const mapStateToProps = (state) => {
+    return {
+        explorers: state.Explorer
+    }
+}
+
+export default connect(mapStateToProps,{
+    initSelfPhoto,
+})(withRouter(Explorer));

@@ -1,18 +1,13 @@
-import React , { Component, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import TableMenus from '../TableMenus';
 import TableTrMenus from '../TableTrMenus';
 import Rename from '../Rename';
-import Photo from './photo';
+import Photo from '../Tables/photo';
 import Attribute from '../Attribute';
-import SharePdf from '../SharePdf';
 import { icon, common } from '../../images';
-import './table.less';
-import {
-    downloadFileRequest
-} from '../../modules/files/services';
-import { message } from 'antd';
+import './block.less';
 
-class Table extends Component {
+class Blocks extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -31,12 +26,13 @@ class Table extends Component {
             filetype_cn: '',
             photoFlag: false,
             photo: '',
-            sharePdfFlag: false
         }
     }
-    onClickTbody(e) {
+    onClickBlock(e) {
+        console.log(e)
     let type = e._targetInst.type;
-        if (type == 'tbody') {
+    console.log(type)
+        if (type == 'div' || type == 'ul') {
             this.setState({
                 tbodyMenus: false,
                 trMenus: false
@@ -50,13 +46,13 @@ class Table extends Component {
             }
         }
     }
-    onContextTbodyMenu(e) {
+    onContextBlockMenu(e) {
         let target = e.target;
         let type = e._targetInst.type;
         let x = e.nativeEvent.screenX;
         let y = e.nativeEvent.screenY;
         let tbodymenus = document.getElementById('tbodymenus');
-        if (type == 'tbody') {
+        if (type == 'div') {
             this.setState({
                 tbodyMenus: true,
                 trMenus: false
@@ -71,12 +67,13 @@ class Table extends Component {
         }
         e.preventDefault();
     }
-    onContextTrMenu(e,systemid,parentid,filetype,filename,filesize,createtime,filetype_cn) { // tr右击
+    onContextLiMenu(e,systemid,parentid,filetype,filename,filesize,createtime,filetype_cn) { // tr右击
         let type = e._targetInst.type;
         let x = e.nativeEvent.screenX;
         let y = e.nativeEvent.screenY;
         let trmenus = document.getElementById('trmenus');
-        if (type == 'tr' || type == 'td') {
+        console.log(type)
+        if (type == 'li' || type == 'img' || type == 'span') {
             this.setState({
                 tbodyMenus:false,
                 trMenus: true,
@@ -112,7 +109,7 @@ class Table extends Component {
             tbodyMenus: false
         })
     }
-    onClickTr(e) {
+    onClickLi(e) {
         this.setState({
             trMenus: false
         })
@@ -290,119 +287,67 @@ class Table extends Component {
             photo: ''
         })
     }
-    // 打开PDF分享
-    openSharePdf = () => {
-        this.setState({
-            sharePdfFlag: true,
-            trMenus: false
-        })
-    }
-    // 关闭PDF分享
-    closeSharePdf = () => {
-        this.setState({
-            sharePdfFlag: false,
-        })
-    }
-    // 文件分享
-    shareFile = (filename,disc,bc) => {
-        let {systemid,filetype} = this.state;
-        console.log(disc);
-        this.setState({
-            sharePdfFlag: false
-        })
-        this.props.shareFile(systemid,filename,disc,filetype,bc)
-    }
-    // 取消文件分享
-    cancelShare = () => {
-        let systemid = this.state.systemid;
-        this.setState({
-            trMenus: false
-        })
-        this.props.cancelShare(systemid);
-    }
     render() {
-        let {columns,dataSource,location,favour,file,changeSort,share} = this.props;
-        let {tbodyMenus,trMenus,copySystemid,renameFlag,filename,attributeFlag,filetype,filesize,createtime,systemid,sharePdfFlag} = this.state;
-        console.log(this.state)
+        let {columns,dataSource,location,favour,file,changeSort} = this.props;
+        let {tbodyMenus,trMenus,copySystemid,renameFlag,filename,attributeFlag,filetype,filesize,createtime,systemid} = this.state;
         return (
             <Fragment>
-                <table cellSpacing="0" cellPadding="0" className="tableContainer">
-                    <thead>
-                        <tr>
-                            {Object.keys(columns).length?columns.map(item=>{
-                                return(
-                                    <th width={item.width} className='borderR' style={item.right?{paddingRight: '1%',textAlign: 'right'}:{}}>{item.title}</th>
-                                )
-                            }):''}
-                        </tr>
-                    </thead>
-                    <tbody onContextMenu={(e)=>this.onContextTbodyMenu(e)} onClick={(e=>this.onClickTbody(e))} ref={tBody=>this.tBody=tBody}>
+                <div className="blocks" onContextMenu={(e)=>this.onContextBlockMenu(e)} onClick={(e=>this.onClickBlock(e))} ref={tBody=>this.tBody=tBody}>
+                    <ul>
                         {
-                            Object.keys(dataSource).length?dataSource.map(item=>{
+                            Object.keys(dataSource).length?
+                            dataSource.map(item=>{
                                 return(
-                                    <tr 
-                                        onContextMenu={(e)=>this.onContextTrMenu(e,item.systemid,item.parentid,item.filetype,item.filename,item.filesize,item.createtime,item.filetype_cn)} 
+                                    <li onContextMenu={(e)=>this.onContextLiMenu(e,item.systemid,item.parentid,item.filetype,item.filename,item.filesize,item.createtime,item.filetype_cn)} 
                                         onDoubleClick={()=>this.onDoubleClick(item.filetype,item.systemid,item.filename,item.favour)} 
-                                        onClick={(e)=>this.onClickTr(e)}
-                                    >
-                                        {
-                                            columns.map(data=>{
-                                                return (
-                                                    <td width={data.width} style={data.right?{paddingRight: '1%',textAlign: 'right'}:{}}>{data.hasImg?<img src={
-                                                                                                                                                                    item.filetype === 0 ? common.file.default :
-                                                                                                                                                                    item.filetype === 1 ? icon.word.default :
-                                                                                                                                                                    item.filetype === 2 ? icon.photo.default :
-                                                                                                                                                                    item.filetype === 3 ? icon.music.default :
-                                                                                                                                                                    item.filetype === 4 ? icon.video.default :
-                                                                                                                                                                    item.filetype === 5 ? icon.package.default :
-                                                                                                                                                                    item.filetype === 6 ? icon.file3.default :
-                                                                                                                                                                    item.filetype === 7 ? icon.excel.default :
-                                                                                                                                                                    item.filetype === 8 ? icon.ppt.default :
-                                                                                                                                                                    item.filetype === 9 ? icon.pdf.default : ''
-                                                                                                                                                                }></img>:''}{item[data.dataIndex]}</td>
-                                                )
-                                            })
-                                        }
-                                    </tr>
+                                        onClick={(e)=>this.onClickLi(e)}>
+                                        <img src={
+                                                    item.filetype === 0 ? common.file.default :
+                                                    item.filetype === 1 ? icon.word.default :
+                                                    item.filetype === 2 ? icon.photo.default :
+                                                    item.filetype === 3 ? icon.music.default :
+                                                    item.filetype === 4 ? icon.video.default :
+                                                    item.filetype === 5 ? icon.package.default :
+                                                    item.filetype === 6 ? icon.file3.default :
+                                                    item.filetype === 7 ? icon.excel.default :
+                                                    item.filetype === 8 ? icon.ppt.default :
+                                                    item.filetype === 9 ? icon.pdf.default : ''
+                                                }></img>
+                                        <span>{item.filename}</span>
+                                    </li>
                                 )
-                            }): <div className="nofileContainer">
-                                    <img src={common.nofile.default}></img>
-                            </div>
+                            }):''
                         }
-                        <TableMenus 
-                            tbodyMenus={tbodyMenus} 
-                            refresh={()=>this.refresh()} 
-                            pasteFile={this.pasteFile} 
-                            copySystemid={copySystemid}
-                            showAttribute={this.showAttribute}
-                            createFile={this.createFile}
-                            uploadFile={this.uploadFile}
-                            file={file}
-                            changeSort={changeSort}
-                            share={share}
-                        />
-                        <TableTrMenus 
-                            filetype={filetype}
-                            systemid={systemid}
-                            filename={filename}
-                            trMenus={trMenus} 
-                            copyFile={this.copyFile} 
-                            renameFile={this.renameFile} 
-                            deleteFile={this.deleteFile}
-                            shearFile={this.shearFile}
-                            showAttribute={this.showAttribute}
-                            downloadFile={this.downloadFile}
-                            addToFavourite={this.addToFavourite}
-                            favour={favour}
-                            cancelToMyfile={this.cancelToMyfile}
-                            file={file}
-                            openFile={this.openFile}
-                            openSharePdf={this.openSharePdf}
-                            share={share}
-                            cancelShare={this.cancelShare}
-                        />
-                    </tbody>
-                </table>
+                    </ul>
+                </div>
+                <TableMenus 
+                    tbodyMenus={tbodyMenus} 
+                    refresh={()=>this.refresh()} 
+                    pasteFile={this.pasteFile} 
+                    copySystemid={copySystemid}
+                    showAttribute={this.showAttribute}
+                    createFile={this.createFile}
+                    uploadFile={this.uploadFile}
+                    file={file}
+                    changeSort={changeSort}
+                />
+                <TableTrMenus 
+                    filetype={filetype}
+                    systemid={systemid}
+                    filename={filename}
+                    trMenus={trMenus} 
+                    copyFile={this.copyFile} 
+                    renameFile={this.renameFile} 
+                    deleteFile={this.deleteFile}
+                    shearFile={this.shearFile}
+                    showAttribute={this.showAttribute}
+                    downloadFile={this.downloadFile}
+                    addToFavourite={this.addToFavourite}
+                    favour={favour}
+                    cancelToMyfile={this.cancelToMyfile}
+                    file={file}
+                    openFile={this.openFile}
+                />
                 <Rename 
                     renameFlag={renameFlag}
                     cancelRename={this.cancelRename}
@@ -419,10 +364,9 @@ class Table extends Component {
                     location={location}
                 />
                 <Photo photoFlag={this.state.photoFlag} photo={this.state.photo} closePhoto={this.closePhoto}/>
-                <SharePdf filename={filename} sharePdfFlag={sharePdfFlag} closeSharePdf={this.closeSharePdf} shareFile={this.shareFile}/>
             </Fragment>
         )
     }
 }
 
-export default Table;
+export default Blocks;

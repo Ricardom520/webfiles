@@ -7,6 +7,8 @@ import Menus from './menus';
 import Dustbin from './dustbin';
 import Favourite from './favorite';
 import File from './File';
+import Myshare from './myshare';
+import Explorer from './explorer';
 
 export default combineReducers({
     Register,
@@ -17,4 +19,6 @@ export default combineReducers({
     Dustbin,
     Favourite,
     File,
+    Myshare,
+    Explorer,
 })

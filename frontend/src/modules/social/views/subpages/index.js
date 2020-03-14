@@ -44,7 +44,7 @@ class SocialIndex extends Component {
                 <section className='cont2'>
                     <section className='modal line'>
                         <div className='container'>
-                            <p className="header">
+                            <p className="Header">
                                 <h3>内容精选</h3>
                                 <Link to="/social/contents">往期精选></Link>
                             </p>
@@ -63,7 +63,7 @@ class SocialIndex extends Component {
                 <section className='cont3'>
                     <section className='modal line'>
                         <div className='container'>
-                            <p className="header">
+                            <p className="Header">
                                 <h3>单品推荐</h3>
                                 <div>
                                     <span>种类：</span>
@@ -89,7 +89,7 @@ class SocialIndex extends Component {
                 <section className='cont4'>
                     <section className='modal line'>
                         <div className='container'>
-                            <p className="header">
+                            <p className="Header">
                                 <h3>达人推荐</h3>
                                 <Link to="/social/recombp">更多达人></Link>
                             </p>

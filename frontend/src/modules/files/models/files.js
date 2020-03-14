@@ -18,6 +18,9 @@ import {
     cancelToMyfileRequest,
     initFileRequest,
     findFileFileRequest,
+    shareFileRequest,
+    initMysharesRequest,
+    cancelShareRequest,
 } from '../services';
 
 export const initMyfiles = (params) => {
@@ -294,6 +297,48 @@ export const findFileFile = (params) => {
             })
             .catch(error=>{
                 console.log(error);
+            })
+    }
+}
+
+export const shareFile = (params) => {
+    return dispatch => {
+        shareFileRequest(params)
+            .then(res=>{
+                console.log(res)
+                if (res.code === 0) {
+                    message.success(res.msg);
+                }
+                dispatch({type: actionTypes.SHAREDATA_FILE})
+            })
+            .catch(error=>{
+                console.log(error)
+            })
+    }
+}
+
+export const initMyshares = (params) => {
+    return dispatch => {
+        initMysharesRequest(params)
+            .then(res=>{
+                console.log(res)
+                dispatch({type:actionTypes.INITDATA_MYSHARE,payload:{res:res,parentid:params.parentid,filename:params.filename,favour:params.favour}})
+            })
+            .catch(error=>{
+                console.log(error)
+            })
+    }
+}
+
+export const cancelShare = (params) => {
+    return dispatch => {
+        cancelShareRequest(params)
+            .then(res=>{
+                console.log(res)
+                if (res.code === 0) {
+                    message.success(res.msg);
+                }
+                dispatch({type: actionTypes.CANCELDATA_MYSHARE,payload:params})
             })
     }
 }

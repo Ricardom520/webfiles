@@ -53,45 +53,17 @@ class Position extends Component {
                             <button></button>
                         </div>
                     </div>
-                    <div className='tables'>
-                        <table cellSpacing="0" cellPadding="0">
-                            <thead>
-                                <tr>
-                                    <th width='15%' className='borderR'>名称</th>
-                                    <th width='5%' className='borderR'>类型</th>
-                                    <th width='6%' className='borderR' style={{paddingRight: '1%', textAlign: 'right'}}>大小</th>
-                                    <th width='8%' className='borderR'>修改时间</th>
-                                    <th width='6%' className='borderR'>修改者</th>
-                                    <th width='12%' className='borderR'>创建时间</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td width='15%'><img src={common.file.default}></img> 测试1</td>
-                                    <td width='5%'>文件夹</td>
-                                    <td width='6%' style={{paddingRight: '1%', textAlign: 'right'}}>97.6K</td>
-                                    <td width='8%'>昨天 15:21</td>
-                                    <td width='6%'>Ricardom</td>
-                                    <td width='12%'>2019/12/26 20:48</td>
-                                </tr>
-                                <tr>
-                                    <td width='15%'><img src={common.file.default}></img> 测试1</td>
-                                    <td width='5%'>文件夹</td>
-                                    <td width='6%' style={{paddingRight: '1%', textAlign: 'right'}}>97.6K</td>
-                                    <td width='8%'>昨天 15:21</td>
-                                    <td width='6%'>Ricardom</td>
-                                    <td width='12%'>2019/12/26 20:48</td>
-                                </tr>
-                                <tr>
-                                    <td width='15%'><img src={common.file.default}></img> 测试1</td>
-                                    <td width='5%'>文件夹</td>
-                                    <td width='6%' style={{paddingRight: '1%', textAlign: 'right'}}>97.6K</td>
-                                    <td width='8%'>昨天 15:21</td>
-                                    <td width='6%'>Ricardom</td>
-                                    <td width='12%'>2019/12/26 20:48</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div className='uls'>
+                        <ul>
+                            <li>
+                                <img src={common.file.default}></img>
+                                <span>收藏夹</span>
+                            </li>
+                            <li>
+                                <img src={common.file.default}></img>
+                                <span>我的文档</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </Fragment>

@@ -2,6 +2,7 @@ import React, {Component,Fragment} from 'react';
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import Table from '../../../../components/Tables';
+import Block from '../../../../components/Block';
 import { icon, common } from '../../../../images/index';
 import {
     initMyfiles,
@@ -16,6 +17,7 @@ import {
     backFile,
     frontFile,
     addToFavourite,
+    shareFile,
 } from '../../models/files';
 import '../files.less';
 import {
@@ -29,6 +31,7 @@ class Myfiles extends Component {
             myfilesData: [],
             location: '',
             favorited: false,
+            fbType: 0,
         }
     }
     componentDidMount() {
@@ -99,6 +102,11 @@ class Myfiles extends Component {
                 console.log(download)
             })
     }
+    changeSort = (type) => {
+        this.setState({
+            fbType: type
+        })
+    }
     b64toBlob = (b64Data, contentType, sliceSize) => {
         contentType = contentType || '';
         sliceSize = sliceSize || 512;
@@ -153,6 +161,11 @@ class Myfiles extends Component {
         let userid = sessionStorage.getItem('userid');
         this.props.addToFavourite({userid:userid,systemid:systemid,filetype:filetype})
     }
+    shareFile = (systemid,filename,disc,filetype,bc) => { // 分享文件
+        console.log(disc)
+        let userid = sessionStorage.getItem('userid');
+        this.props.shareFile({userid:userid,systemid:systemid,filename:filename,disc:disc,filetype:filetype,bc:bc})
+    }
     componentWillReceiveProps(nextprops) {
         let location = '';
         let fileLists = this.props.myfiles.fileLists;
@@ -164,11 +177,9 @@ class Myfiles extends Component {
             myfilesData: this.props.myfiles.myfilesData,
             favorited: this.props.myfiles.fileLists.slice(-1)[0].favour,
         })
-        console.log(this.props.myfiles.fileLists.slice(-1))
-        console.log(nextprops)
     }
     render() {
-        let {myfilesData,location,content,favorited} = this.state;
+        let {myfilesData,location,content,favorited,fbType} = this.state;
         let {curParentid,fileLists} = this.props.myfiles;
         let columns  = [
             {
@@ -253,7 +264,25 @@ class Myfiles extends Component {
                             <input type="file" onChange={(e)=>this.uploadFile(false,e)} style={{display:'none'}} id="file"/>
                         </div>
                     </div>
-                    <div className='tables'>
+                    {
+                        fbType ?
+                            <Block
+                                dataSource={myfilesData} 
+                                initData={this.initMyfiles} 
+                                pasteFile={this.pasteFile}
+                                curParentid={curParentid}
+                                handleNewName={this.handleNewName}
+                                deleteFile={this.deleteFile}
+                                shearFile={this.shearFile}
+                                location={location}
+                                createFile={this.createFile}
+                                uploadFile={this.uploadFile}
+                                downloadFile={this.downloadFile}
+                                content={content}
+                                addToFavourite={this.addToFavourite}
+                                changeSort={this.changeSort}
+                            />
+                             : <div className='tables'>
                         <Table 
                             columns={columns} 
                             dataSource={myfilesData} 
@@ -269,8 +298,11 @@ class Myfiles extends Component {
                             downloadFile={this.downloadFile}
                             content={content}
                             addToFavourite={this.addToFavourite}
+                            changeSort={this.changeSort}
+                            shareFile={this.shareFile}
                         />
                     </div>
+                    }
                 </div>
                 <a ref={download=>this.download=download} style={{display:'none'}} download>下载隐藏按钮</a>
             </Fragment>
@@ -297,4 +329,5 @@ export default connect(mapStateToProps,{
                                         backFile,
                                         frontFile,
                                         addToFavourite,
+                                        shareFile,
                                     })(withRouter(Myfiles));
