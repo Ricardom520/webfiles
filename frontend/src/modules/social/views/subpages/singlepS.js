@@ -6,7 +6,7 @@ import SingleP from '../../../../components/SingleP';
 import ContentS from '../../../../components/ContentS';
 import RecomBP from '../../../../components/RecomBP';
 import Photos from '../../../../components/Photos';
-const pdful = require('../07染色体数目变异20191011-12.pdf');
+const pdful = require('../染色体.pdf');
 
 class singlepS extends Component {
     constructor(props) {

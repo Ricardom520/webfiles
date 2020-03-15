@@ -11,7 +11,7 @@ import SinglePL from './subpages/singlepL';
 import SinglePS from './subpages/singlepS';
 import SinglePPD from './subpages/singlepPD';
 import SinglePPH from './subpages/singlepPH';
-const pdful = require('./07染色体数目变异20191011-12.pdf');
+const pdful = require('./染色体.pdf');
 
 class Social extends Component {
     constructor(props) {

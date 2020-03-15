@@ -31,4 +31,6 @@ export default {
     CANCELDATA_MYSHARE: 'CANCELDATA_MYSHARE', // 取消分享
 
     initDATA_SELFPHOTO: 'initDATA_SELFPHOTO', // 初始化头像
+
+    initDATA_PDF: 'initDATA_PDF' // 初始化论文模块
 }

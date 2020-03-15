@@ -1,12 +1,16 @@
 import React , {Component, Fragment} from 'react';
 import {Link,withRouter} from 'react-router-dom';
+import { connect } from 'react-redux';
 import '../social.less';
 import {common, icon} from '../../../../images';
 import SingleP from '../../../../components/SingleP';
 import ContentS from '../../../../components/ContentS';
 import RecomBP from '../../../../components/RecomBP';
 import Photos from '../../../../components/Photos';
-const pdful = require('../07染色体数目变异20191011-12.pdf');
+import {
+    initDataPdf
+} from '../../models/social';
+const pdful = require('../染色体.pdf');
 
 class singlepPD extends Component {
     constructor(props) {
@@ -14,6 +18,9 @@ class singlepPD extends Component {
         this.state = {
             visiably: true
         }
+    }
+    componentDidMount() {
+        this.props.initDataPdf()
     }
     openModal = (type,systemid) => {
         console.log(type)
@@ -73,4 +80,12 @@ class singlepPD extends Component {
     }
 }
 
-export default withRouter(singlepPD);
+const mapStateToProps = (state) => {
+    return {
+        Pdf: state.Social
+    }
+}
+
+export default connect(mapStateToProps, {
+    initDataPdf,
+})(withRouter(singlepPD));

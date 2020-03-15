@@ -9,6 +9,7 @@ import Favourite from './favorite';
 import File from './File';
 import Myshare from './myshare';
 import Explorer from './explorer';
+import Social from './social';
 
 export default combineReducers({
     Register,
@@ -21,4 +22,5 @@ export default combineReducers({
     File,
     Myshare,
     Explorer,
+    Social,
 })

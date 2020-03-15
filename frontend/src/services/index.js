@@ -3,7 +3,7 @@ import qs from 'qs';
 
 const service = axios.create({
     baseURL: 'http://127.0.0.1/webfiles/public/index.php',
-    timeout: 20000,
+    timeout: 40000,
     //responseType: 'json',
     withCredentials: false,
     headers: {

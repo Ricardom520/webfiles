@@ -275,9 +275,11 @@ class Myfiles extends Controller
         $shareid = 'S'.substr($userid,0,2).time().substr($systemid,-2);
         $sql = 'select * from files f inner join users u on f.userid = u.userid where f.systemid="'.$systemid.'" and f.userid="'.$userid.'"';
         $res = Db::query($sql);
-        $Insql = 'Insert into shares (shareid,userid,systemid,filename,filetype,content,nc,username,sharetime,disc,bc) values 
-                ("'.$shareid.'","'.$userid.'","'.$systemid.'","'.$filename.'","'.$filetype.'","'.$res[0]['content'].'","'
-                .$res[0]['nc'].'","'.$res[0]['username'].'","'.$sharetime.'","'.$disc.'","'.$bc.'")';
+        if($filetype === 9) {
+            $Insql = 'Insert into sharespdf (shareid,userid,systemid,filename,content,nc,username,sharetime,disc,bc) values 
+            ("'.$shareid.'","'.$userid.'","'.$systemid.'","'.$filename.'","'.$res[0]['content'].'","'
+            .$res[0]['nc'].'","'.$res[0]['username'].'","'.$sharetime.'","'.$disc.'","'.$bc.'")';
+        }
         Db::query($Insql);
         $arr = array(
             'code'=>0,
