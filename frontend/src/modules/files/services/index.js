@@ -103,3 +103,23 @@ export const initMysharesRequest = (params) => {
 export const cancelShareRequest = (params) => {
     return service.post('/api/share/cancel', {...params})
 }
+
+// 获取分享图片的数据
+export const getsharePicRequest = (params) => {
+    return service.get('/api/myfiles/getpic', {params:params})
+}
+
+// 分享图片
+export const sharePicRequest = (params) => {
+    return service.post('/api/myfiles/sharepic', {...params})
+}
+
+// 获取已有分享软件
+export const getHasProRequest = (params) => {
+    return service.get('/api/myfiles/getsoft', {params:params})
+}
+
+// 创建分享软件项目
+export const createNewProRequest = (params) => {
+    return service.post('/api/myfiles/createsoft', {...params})
+}

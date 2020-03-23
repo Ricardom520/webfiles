@@ -44,11 +44,11 @@ class recombp extends Component {
                 <section className='cont4'>
                     <section className='modal line'>
                         <div className='container'>
-                            <p className="header">
+                            <p className="Header">
                                 <h3>达人推荐</h3>
                                 <Link>更多达人></Link>
                             </p>
-                            <div className="content">
+                            <div className="Content">
                                 <ul>
                                     <RecomBP userImg={common.userImg1.default} headImg={common.headImg1.default} name="虽虽酱" img={common.favorites.default} num="9465" good="Q版"/>
                                     <RecomBP userImg={common.userImg2.default} headImg={common.headImg2.default} name="虽虽酱" img={common.favorites.default} num="9465" good="Q版"/>

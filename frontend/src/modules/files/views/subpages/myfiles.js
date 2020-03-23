@@ -1,6 +1,7 @@
 import React, {Component,Fragment} from 'react';
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router-dom';
+import Load from '../../../../components/Load';
 import Table from '../../../../components/Tables';
 import Block from '../../../../components/Block';
 import { icon, common } from '../../../../images/index';
@@ -18,10 +19,14 @@ import {
     frontFile,
     addToFavourite,
     shareFile,
+    sharePic,
+    getHasPro,
+    createNewPro,
 } from '../../models/files';
 import '../files.less';
 import {
-    downloadFileRequest
+    downloadFileRequest,
+    getsharePicRequest,
 } from '../../services';
 
 class Myfiles extends Component {
@@ -32,6 +37,7 @@ class Myfiles extends Component {
             location: '',
             favorited: false,
             fbType: 0,
+            hasShareSoft: []
         }
     }
     componentDidMount() {
@@ -161,10 +167,15 @@ class Myfiles extends Component {
         let userid = sessionStorage.getItem('userid');
         this.props.addToFavourite({userid:userid,systemid:systemid,filetype:filetype})
     }
-    shareFile = (systemid,filename,disc,filetype,bc) => { // 分享文件
+    shareFile = (systemid,filename,disc,filetype,bc) => { // 分享pdf文件
         console.log(disc)
         let userid = sessionStorage.getItem('userid');
         this.props.shareFile({userid:userid,systemid:systemid,filename:filename,disc:disc,filetype:filetype,bc:bc})
+    }
+    sharePic = (filename,disc,content,systemid) => {
+        let userid = sessionStorage.getItem('userid');
+        let username = sessionStorage.getItem('username');
+        this.props.sharePic({username:username,userid:userid,filename:filename,disc:disc,content:content,systemid:systemid})
     }
     componentWillReceiveProps(nextprops) {
         let location = '';
@@ -176,10 +187,20 @@ class Myfiles extends Component {
             location: location,
             myfilesData: this.props.myfiles.myfilesData,
             favorited: this.props.myfiles.fileLists.slice(-1)[0].favour,
+            hasShareSoft: nextprops.myfiles.hasShareSoft,
         })
     }
+    getHasPro = () => {
+        let userid = sessionStorage.getItem('userid');
+        this.props.getHasPro({userid:userid});
+    }
+    createNewPro = (filename,desc,bc,systemid) => {
+        let userid = sessionStorage.getItem('userid');
+        console.log(bc)
+        this.props.createNewPro({userid: userid, filename: filename, desc: desc, bc: bc, systemid: systemid})
+    }
     render() {
-        let {myfilesData,location,content,favorited,fbType} = this.state;
+        let {myfilesData,location,content,favorited,fbType,hasShareSoft} = this.state;
         let {curParentid,fileLists} = this.props.myfiles;
         let columns  = [
             {
@@ -281,6 +302,8 @@ class Myfiles extends Component {
                                 content={content}
                                 addToFavourite={this.addToFavourite}
                                 changeSort={this.changeSort}
+                                getsharePicRequest={getsharePicRequest}
+                                sharePic={this.sharePic}
                             />
                              : <div className='tables'>
                         <Table 
@@ -300,11 +323,17 @@ class Myfiles extends Component {
                             addToFavourite={this.addToFavourite}
                             changeSort={this.changeSort}
                             shareFile={this.shareFile}
+                            getsharePicRequest={getsharePicRequest}
+                            sharePic={this.sharePic}
+                            getHasPro={this.getHasPro}
+                            hasShareSoft={hasShareSoft}
+                            createNewPro={this.createNewPro}
                         />
                     </div>
                     }
                 </div>
                 <a ref={download=>this.download=download} style={{display:'none'}} download>下载隐藏按钮</a>
+                <Load/>
             </Fragment>
         )
     }
@@ -330,4 +359,7 @@ export default connect(mapStateToProps,{
                                         frontFile,
                                         addToFavourite,
                                         shareFile,
+                                        sharePic,
+                                        getHasPro,
+                                        createNewPro,
                                     })(withRouter(Myfiles));

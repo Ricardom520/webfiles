@@ -5,9 +5,9 @@ import './singlep.less';
 
 class SingleP extends Component {
     render() {
-        const {type,openModal,title,num,img,systemid} = this.props;
+        const {title,num,img,shareid,type,openModal} = this.props;
         return (
-            <li className="singlePContainer" onClick={()=>openModal(`${type}`,`${systemid}`)}>
+            <li className="singlePContainer" onClick={()=>openModal(`${type}`,`${shareid}`)}>
                 <Link>
                     <img src={img}></img>
                     <div className="disc">

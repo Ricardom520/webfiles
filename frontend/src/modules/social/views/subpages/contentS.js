@@ -44,7 +44,7 @@ class contentS extends Component {
                 <section className='cont2'>
                     <section className='modal line'>
                         <div className='container'>
-                            <p className="header">
+                            <p className="Header">
                                 <h3>内容精选</h3>
                             </p>
                             <div className="content">

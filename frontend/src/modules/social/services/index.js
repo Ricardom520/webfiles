@@ -1,5 +1,25 @@
 import service from '../../../services';
 
-export const initDataPdfRequest = (params) => {
+export const initDataPdfRequest = (params) => { // 初始化论文社区
     return service.get('/api/social/pdf', {params:params})
+}
+
+export const openDataPdfRequest = (params) => { // 打开pdf文件
+    return service.get('/api/social/openpdf', {params: params});
+}
+
+export const initDataLiveRequest = (params) => {
+    return service.get('/api/social/live', {params:params})
+}
+
+export const initDataPhotoRequest = (params) => {
+    return service.get('/api/social/photo', {params:params})
+}
+
+export const openDataPicRequest = (params) => { // 打开pdf文件
+    return service.get('/api/social/openphoto', {params: params});
+}
+
+export const initDataSoftwareRequest = (params) => {
+    return service.get('/api/social/software', {params:params})
 }

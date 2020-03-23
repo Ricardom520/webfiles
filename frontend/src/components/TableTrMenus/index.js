@@ -4,7 +4,7 @@ import '../TableMenus/tablemenus.less';
 
 class TableMenus extends Component {
     render() {
-        let {trMenus,copyFile,renameFile,deleteFile,shearFile,showAttribute,downloadFile,addToFavourite,favour,cancelToMyfile,file,openFile,systemid,filetype,filename,openSharePdf,share,cancelShare} = this.props;
+        let {trMenus,copyFile,renameFile,deleteFile,shearFile,showAttribute,downloadFile,addToFavourite,favour,cancelToMyfile,file,openFile,systemid,filetype,filename,openSharePdf,share,cancelShare,openSharePic,openShareSoft} = this.props;
         console.log(trMenus)
         return (
             <div className="tablemenusContainer" style={trMenus?{display:'block'}:{display:'none'}} id="trmenus">
@@ -18,7 +18,7 @@ class TableMenus extends Component {
                     <li onClick={downloadFile}>
                         <img src={icon.download.default}></img>下载
                     </li>
-                    <li onClick={openSharePdf} style={share?{display:'none'}:{display:'block'}}>
+                    <li onClick={filetype == 9?openSharePdf:filetype == 2?openSharePic:filetype == 0?openShareSoft:filetype == 5?openShareSoft:''} style={share?{display:'none'}:{display:'block'}}>
                         <img src={icon.link.default}></img>分享
                     </li>
                     <li onClick={cancelShare} style={share?{display:'block'}:{display:'none'}}>

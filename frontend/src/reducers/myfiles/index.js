@@ -14,6 +14,7 @@ let initState = {
     content: '',
     backFile: [],
     frontFile: [],
+    hasShareSoft: []
 }
 
 export default (state = initState, action) => {
@@ -197,6 +198,9 @@ export default (state = initState, action) => {
             state.myfilesData = action.payload;
             return {...state};
         case actionTypes.ADDFAVOURDATA_MYFILE:
+            return {...state};
+        case actionTypes.GETHASPRO_MYFILES:
+            state.hasShareSoft = action.payload;
             return {...state};
         default:
             return state;

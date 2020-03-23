@@ -9,6 +9,8 @@ class Photos extends Component {
         this.state = {
             timer: '',
             currentIndex: 1,
+            length: 0,
+            width: 0,
         }
     }
 
@@ -62,7 +64,8 @@ class Photos extends Component {
     }
     trunLeft(left) {
         let currentIndex = this.state.currentIndex;
-        if (currentIndex >= 1) {
+        console.log(currentIndex)
+        if (currentIndex > 1) {
             let slide = document.querySelector('.slideContainerPhotos');
             let slideLeft = slide.style.left;
             slide.style.left = parseInt(slideLeft) + left + 'px';
@@ -76,8 +79,13 @@ class Photos extends Component {
         }
     }
     trunRight(right) {
+        console.log("右击了")
         let currentIndex = this.state.currentIndex;
-        if (currentIndex <= 5) {
+        let length = this.state.length;
+        console.log(length)
+        console.log(currentIndex)
+        if (currentIndex < length) {
+            console.log("huagong ; ")
             let slide = document.querySelector('.slideContainerPhotos');
             let slideLeft = slide.style.left;
             slide.style.left = parseInt(slideLeft) - right + 'px';
@@ -88,27 +96,41 @@ class Photos extends Component {
             })
         }
     }
+    componentWillReceiveProps(nextProps) {
+        let length = Object.keys(nextProps.pics).length;
+        let slide = this.slide;
+        this.setState({
+            length: length,
+            width: length * 780 + 'px'
+        })
+        slide.style.width = length * 780 + 'px';
+    }
+    hideModal () {
+        let slide = this.slide;
+        slide.style.left = '0px';
+        this.setState({
+            timer: '',
+            currentIndex: 1,
+            length: 0,
+            width: 0,
+        })
+        this.props.hideModal();
+    }
     render() {
-        const {visiably,hideModal} = this.props;
+        const {visiably,hideModal,filename,disc,pics,width} = this.props;
         return (
             <div className="PhotosContainer" style={visiably?{display: 'none'}: {display:'block'}}>
                 <div className='slides' ref={slides=>this.slides=slides}>
-                    <div className='slideContainerPhotos' style={{left: '0px'}}>
-                        <a>
-                            <img src={common.slide1.default}></img>
-                        </a>
-                        <a>
-                            <img src={common.slide2.default}></img>
-                        </a>
-                        <a>
-                            <img src={common.slide3.default}></img>
-                        </a>
-                        <a>
-                            <img src={common.slide4.default}></img>
-                        </a>
-                        <a>
-                            <img src={common.slide5.default}></img>
-                        </a>
+                    <div className='slideContainerPhotos' style={{left: '0px',width: width}} ref={slide=>this.slide=slide}>
+                        {
+                            Object.keys(pics).length?pics.map(item=>{
+                                return (
+                                    <a>
+                                        <img src={item.pic}></img>
+                                    </a>
+                                )
+                            }):''
+                        }
                     </div>
                     <div className='leRi'>
                         <ul>
@@ -121,13 +143,13 @@ class Photos extends Component {
                     <Like/>
                 </div>
                 <div className='disc'>
-                    <h3>广师铁板烧</h3>
+                    <h3>{filename}</h3>
                     <p>
-                        这里环境优美，值得推荐哈哈哈哈哈哈哈哈哈
+                        {disc}
                     </p>
                 </div>
                 <div className="close">
-                    <button onClick={hideModal}>X</button>
+                    <button onClick={()=>this.hideModal()}>X</button>
                 </div>
             </div>
         )

@@ -33,7 +33,7 @@ class Code extends Component {
                         <ul>
                             <li>
                                 <div className="title">
-                                    <img src={common.file1.default}></img>
+                                    <img src={common.file.default}></img>
                                     <Link>2018/12/12</Link>
                                 </div>
                                 <div>

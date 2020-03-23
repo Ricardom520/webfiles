@@ -48,7 +48,6 @@ class Social extends Component {
         setTimeout(function() {
             slide.style.left = -width*boundary + 'px';
             slide.style.transition = 'left 0s';
-            console.log(slide.style.left)
         }, 1500);
         this.setState({
             currentIndex: boundary

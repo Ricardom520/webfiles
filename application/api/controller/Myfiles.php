@@ -272,10 +272,10 @@ class Myfiles extends Controller
         $sharetime = date('Y-m-d H:i:s');
         $Upsql = 'Update files set share = 1, sharetime="'.$sharetime.'" where userid = "'.$userid.'" and systemid="'.$systemid.'"';
         Db::query($Upsql);
-        $shareid = 'S'.substr($userid,0,2).time().substr($systemid,-2);
+        $shareid = 'S'.substr($userid,0,2).time().rand(10,100).'0';
         $sql = 'select * from files f inner join users u on f.userid = u.userid where f.systemid="'.$systemid.'" and f.userid="'.$userid.'"';
         $res = Db::query($sql);
-        if($filetype === 9) {
+        if($filetype == 9) {
             $Insql = 'Insert into sharespdf (shareid,userid,systemid,filename,content,nc,username,sharetime,disc,bc) values 
             ("'.$shareid.'","'.$userid.'","'.$systemid.'","'.$filename.'","'.$res[0]['content'].'","'
             .$res[0]['nc'].'","'.$res[0]['username'].'","'.$sharetime.'","'.$disc.'","'.$bc.'")';
@@ -284,6 +284,76 @@ class Myfiles extends Controller
         $arr = array(
             'code'=>0,
             'msg'=>"分享成功"
+        );
+        return $arr;
+    }
+
+    public function getpic(Request $request)
+    {
+        header('Access-Control-Allow-Origin: *');
+        $data = $request->get();
+        $userid = $data['userid'];
+        $systemid = $data['systemid'];
+        $sql = 'Select content from files where userid="'.$userid.'" and systemid="'.$systemid.'"';
+        $res = Db::query($sql);
+        return $res[0];
+    }
+
+    public function sharepic(Request $request)
+    {
+        header('Access-Control-Allow-Origin: *');
+        $data = $request->post();
+        $userid = $data['userid'];
+        $username = $data['username'];
+        $filename = $data['filename'];
+        $disc = $data['disc'];
+        $content = $data['content'];
+        $bc = $content[0];
+        $Upsql = 'Update files set share = 1, sharetime="'.$sharetime.'" where userid = "'.$userid.'" and systemid="'.$systemid.'"';
+        Db::query($Upsql);
+        $shareid = 'S'.substr($userid,0,2).time().rand(10,100).'2';
+        $sharetime = date('Y-m-d H:i:s');
+        $sql = 'Insert into sharespic (shareid,userid,username,filename,disc,content,sharetime,bc) values 
+                ("'.$shareid.'","'.$userid.'","'.$username.'",\''.$filename.'\',"'.$disc.'",\''.json_encode($content).'\',"'.$sharetime.'","'.$bc['pic'].'")';
+        Db::query($sql);
+        $arr = array(
+            'code'=>0,
+            'msg'=>'分享成功',
+        );
+        return $arr;
+    }
+
+    public function getsoft(Request $request)
+    {
+        header('Access-Control-Allow-Origin: *');
+        $data = $request->get();
+        $userid = $data['userid'];
+        $sql = 'Select filename from shareswjj where userid="'.$userid.'"';
+        $res = Db::query($sql);
+        return $res;
+    }
+
+    public function createsoft(Request $request)
+    {
+        header('Access-Control-Allow-Origin: *');
+        $data = $request->post();
+        $userid = $data['userid'];
+        $systemid = $data['systemid'];
+        $bc = $data['bc'];
+        $filename = $data['filename'];
+        $disc = $data['desc'];
+        $shareid = 'S'.substr($userid,0,2).time().rand(10,100).'3';
+        $sharetime = date('Y-m-d H:i:s');
+        $Upsql = 'Update files set share = 1, sharetime="'.$sharetime.'" where userid = "'.$userid.'" and systemid="'.$systemid.'"';
+        Db::query($Upsql);
+        $Sesql = 'Select content from files where userid ="'.$userid.'" and systemid ="'.$systemid.'"';
+        $res = Db::query($Sesql);
+        $Insql = 'Insert into shareswjj (shareid,userid,systemid,filename,disc,content,sharetime,updatetime,bc) values("'.$shareid
+                .'","'.$userid.'","'.$systemid.'","'.$filename.'","'.$disc.'","'.$res[0]['content'].'","'.$sharetime.'","'.$sharetime.'","'.$bc.'")';
+        Db::query($Insql);
+        $arr = array(
+            'code'=>0,
+            'msg'=>'分享成功'
         );
         return $arr;
     }

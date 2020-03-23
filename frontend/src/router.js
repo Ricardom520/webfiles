@@ -73,7 +73,7 @@ const Social = Loadable({
 });
 
 const Software = Loadable({
-    loader: () => import('./modules/files/views'),
+    loader: () => import('./modules/software/views'),
     loading: LoadingComponent,
     delay: 100
 });

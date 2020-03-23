@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import './sharepdf.less';
+import '../SharePdf/sharepdf.less';
 import {
     message,
     Button
 } from 'antd';
 import { common } from '../../images';
 
-class SharePdf extends Component {
+class ShareWz extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -41,7 +41,7 @@ class SharePdf extends Component {
         let filename = this.state.filename;
         let desc = this.state.desc;
         let bc = this.state.bc;
-        this.props.shareFile(filename,desc,bc);
+        this.props.submitWz(filename,desc,bc);
         this.setState({
             sharePdfFlag: false,
             desc: '',
@@ -58,7 +58,6 @@ class SharePdf extends Component {
             reader.readAsDataURL(file);
             let that = this;
             reader.onload = function() {
-                console.log(reader.result)
                 that.setState({
                     bc: reader.result
                 })
@@ -67,17 +66,16 @@ class SharePdf extends Component {
             message.warning('上传的图片格式不符');
             return;
         }
-        e.target.value = '';
     }
     render() {
         let {filename,bc,desc} = this.state;
-        let {sharePdfFlag,closeSharePdf} = this.props;
+        let {shareWzlag,closeShareWz} = this.props;
         return (
-            <div className="shareContainer" style={sharePdfFlag?{display:'block'}:{display:'none'}}>
+            <div className="shareContainer" style={shareWzlag?{display:'block'}:{display:'none'}}>
                 <div className="box">
                     <div className="title">
                         <span>文档分享</span>
-                        <span className="close" onClick={()=>this.closeSharePdf()}>+</span>
+                        <span className="close" onClick={closeShareWz}>+</span>
                     </div>
                     <div className="middle">
                         <p>
@@ -116,4 +114,4 @@ class SharePdf extends Component {
     }
 }
 
-export default  SharePdf;
+export default  ShareWz;

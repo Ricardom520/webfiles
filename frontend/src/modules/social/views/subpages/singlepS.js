@@ -1,5 +1,6 @@
 import React , {Component, Fragment} from 'react';
 import {Link,withRouter} from 'react-router-dom';
+import { connect } from 'react-redux';
 import '../social.less';
 import {common, icon} from '../../../../images';
 import SingleP from '../../../../components/SingleP';
@@ -7,26 +8,63 @@ import ContentS from '../../../../components/ContentS';
 import RecomBP from '../../../../components/RecomBP';
 import Photos from '../../../../components/Photos';
 const pdful = require('../染色体.pdf');
+import {
+    initDataSoftware
+} from '../../models/social';
 
 class singlepS extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            visiably: true
+            visiably: true,
+            softData: [],
         }
     }
+    componentDidMount() {
+        window.addEventListener('scroll', this.bindHandleScroll);
+    }
+    bindHandleScroll = (e) => {
+        const scrollTop = (e.srcElement?e.srcElement.documentElement.scrollTop:false)
+                            || window.pageYOffset
+                            || (e.srcElement?e.srcElement.body.scrollTop : 0);
+        let n;
+        let index = this.state.index;
+        if (100 < scrollTop && scrollTop < 300) {
+            n = 1;
+            if (n < index) {
+                return;
+            } else {
+                this.setState({
+                    index: n
+                })
+            }
+        } else if (300 < scrollTop) {
+            n = Math.ceil((scrollTop - 100) / 300);
+            if (n < index) {
+                return;
+            } else {
+                this.setState({
+                    index: n
+                })
+            }
+        }
+        if (index < n && 1 <= n) {
+            this.props.initDataSoftware({index: index})
+        }
+    }
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            softData: this.props.softs.softData,
+        })
+    }
     openModal = (type,systemid) => {
-        console.log(type)
         if (type == "photo" || type === "photo") {
             this.setState({
                 visiably: false
             })
         } else if (type == "software" || type === "software") {
-            console.log(systemid)
-            console.log(this.props.history.push)
             this.props.history.push(`/software/?id=${systemid}`)
         } else if (type == 'pdf' || type === "pdf") {
-            console.log(pdful)
             window.open(pdful.default, '_blank');
         } else if (type == 'live' || type === "live") {
             this.props.history.push(`/live/?id=${systemid}`)
@@ -38,13 +76,13 @@ class singlepS extends Component {
         })
     }
     render() {
-        const {visiably} = this.state;
+        const {visiably,softData} = this.state;
         return (
             <Fragment>
                 <section className='cont3'>
                     <section className='modal line'>
                         <div className='container'>
-                            <p className="header">
+                            <p className="Header">
                                 <h3>单品推荐</h3>
                                 <div>
                                     <span>种类：</span>
@@ -55,22 +93,32 @@ class singlepS extends Component {
                                     <Link to="/social/singlep/photo">照片</Link>
                                 </div>
                             </p>
-                            <div className="content">
+                            <div className="Content">
                                 <ul>
-                                    <SingleP openModal={this.openModal} type="photo" title="广师铁板烧" num={1125} img={common.mainImg6.default} systemid="ph46782"/>
-                                    <SingleP openModal={this.openModal} type="software" title="交友软件" num={1125} img={common.mainImg7.default} systemid="s43572"/>
-                                    <SingleP openModal={this.openModal} type="pdf" title="07染色体数目变异" num={1125} img={common.mainImg8.default} systemid="pd4156477"/>
-                                    <SingleP openModal={this.openModal} type="live" title="被骂“滚出娱乐圈”的她，如今却成为白富美，走上人生巅峰" num={1125} img={common.mainImg9.default}/>
-                                    <SingleP openModal={this.openModal} type="software" title="夹克" num={1125} img={common.mainImg10.default} systemid="l232"/>
+                                    {
+                                        Object.keys(softData).length?softData.map(item=>{
+                                            return (
+                                                <SingleP openModal={this.openModal} type="software" title={item.filename} num={1125} img={item.bc} shareid={item.shareid}/>
+                                            )
+                                        }):''
+                                    }
                                 </ul>
                             </div>
                         </div>
                     </section>
                 </section>
-                <Photos visiably={visiably} hideModal={this.hideModal}/>
             </Fragment>
         )
     }
 }
 
-export default withRouter(singlepS);
+let mapStateToProps = (state) => {
+    console.log(state)
+    return {
+        softs: state.Social
+    }
+}
+
+export default connect(mapStateToProps,{
+    initDataSoftware,
+})(withRouter(singlepS));

@@ -5,6 +5,8 @@ import Rename from '../Rename';
 import Photo from './photo';
 import Attribute from '../Attribute';
 import SharePdf from '../SharePdf';
+import SharePic from '../SharePic';
+import ShareSofe from '../ShareSoft';
 import { icon, common } from '../../images';
 import './table.less';
 import {
@@ -28,10 +30,13 @@ class Table extends Component {
             copyParentid: '',
             renameFlag: false,
             attributeFlag: false,
-            filetype_cn: '',
+            filetype_hz: '',
             photoFlag: false,
             photo: '',
-            sharePdfFlag: false
+            sharePdfFlag: false,
+            sharePicFlag: false,
+            pic: '',
+            shareSoftFlag: false,
         }
     }
     onClickTbody(e) {
@@ -71,7 +76,7 @@ class Table extends Component {
         }
         e.preventDefault();
     }
-    onContextTrMenu(e,systemid,parentid,filetype,filename,filesize,createtime,filetype_cn) { // tr右击
+    onContextTrMenu(e,systemid,parentid,filetype,filename,filesize,createtime,filetype_hz) { // tr右击
         let type = e._targetInst.type;
         let x = e.nativeEvent.screenX;
         let y = e.nativeEvent.screenY;
@@ -86,7 +91,7 @@ class Table extends Component {
                 filename: filename,
                 filesize: filesize,
                 createtime: createtime,
-                filetype_cn: filetype_cn
+                filetype_hz: filetype_hz
             })
             if (x + 185 <= document.body.clientWidth) {
                 trmenus.style.left = x + 5 + 'px';
@@ -262,8 +267,8 @@ class Table extends Component {
     downloadFile = () => {
         let systemid = this.state.systemid;
         let filename = this.state.filename;
-        let filetype_cn = this.state.filetype_cn;
-        this.props.downloadFile(systemid,filename,filetype_cn);
+        let filetype_hz = this.state.filetype_hz;
+        this.props.downloadFile(systemid,filename,filetype_hz);
     }
     // 添加到收藏夹
     addToFavourite = () => {
@@ -292,6 +297,7 @@ class Table extends Component {
     }
     // 打开PDF分享
     openSharePdf = () => {
+        console.log("打开pdf分享")
         this.setState({
             sharePdfFlag: true,
             trMenus: false
@@ -301,6 +307,29 @@ class Table extends Component {
     closeSharePdf = () => {
         this.setState({
             sharePdfFlag: false,
+        })
+    }
+    // 打开图片分享
+    openSharePic = () => {
+        console.log("开图片")
+        let systemid = this.state.systemid;
+        let userid = sessionStorage.getItem('userid');
+        this.props.getsharePicRequest({systemid:systemid,userid:userid}) 
+            .then(res=>{
+                this.setState({
+                    pic: res.content
+                })
+            })
+            console.log(this.props)
+        this.setState({
+            sharePicFlag: true,
+            trMenus: false
+        })
+    }
+    // 关闭图片分享
+    closeSharePic = () => {
+        this.setState({
+            sharePicFlag: false,
         })
     }
     // 文件分享
@@ -320,9 +349,37 @@ class Table extends Component {
         })
         this.props.cancelShare(systemid);
     }
+    // 分享图片
+    sharePic = (filename,disc,content) => {
+        let systemid = this.state.systemid;
+        this.props.sharePic(filename,disc,content,systemid);
+    }
+    // 打开文件夹分享
+    openShareSoft = () => {
+        this.setState({
+            shareSoftFlag: true,
+            trMenus: false
+        })
+    }
+    // 关闭文件夹分享
+    closeShareWjj = () => {
+        this.setState({
+            shareSoftFlag: false
+        })
+    }
+    getHasPro() {
+        this.props.getHasPro();
+    }
+    createNewPro = (filename,desc,bc) => {
+        let systemid = this.state.systemid;
+        this.props.createNewPro(filename,desc,bc,systemid);
+        this.setState({
+            shareSoftFlag: false
+        })
+    }
     render() {
-        let {columns,dataSource,location,favour,file,changeSort,share} = this.props;
-        let {tbodyMenus,trMenus,copySystemid,renameFlag,filename,attributeFlag,filetype,filesize,createtime,systemid,sharePdfFlag} = this.state;
+        let {columns,dataSource,location,favour,file,changeSort,share,hasShareSoft} = this.props;
+        let {tbodyMenus,trMenus,copySystemid,renameFlag,filename,attributeFlag,filetype,filesize,createtime,systemid,sharePdfFlag,sharePicFlag,pic,shareSoftFlag} = this.state;
         console.log(this.state)
         return (
             <Fragment>
@@ -341,7 +398,7 @@ class Table extends Component {
                             Object.keys(dataSource).length?dataSource.map(item=>{
                                 return(
                                     <tr 
-                                        onContextMenu={(e)=>this.onContextTrMenu(e,item.systemid,item.parentid,item.filetype,item.filename,item.filesize,item.createtime,item.filetype_cn)} 
+                                        onContextMenu={(e)=>this.onContextTrMenu(e,item.systemid,item.parentid,item.filetype,item.filename,item.filesize,item.createtime,item.filetype_hz)} 
                                         onDoubleClick={()=>this.onDoubleClick(item.filetype,item.systemid,item.filename,item.favour)} 
                                         onClick={(e)=>this.onClickTr(e)}
                                     >
@@ -400,6 +457,8 @@ class Table extends Component {
                             openSharePdf={this.openSharePdf}
                             share={share}
                             cancelShare={this.cancelShare}
+                            openSharePic={this.openSharePic}
+                            openShareSoft={this.openShareSoft}
                         />
                     </tbody>
                 </table>
@@ -420,6 +479,8 @@ class Table extends Component {
                 />
                 <Photo photoFlag={this.state.photoFlag} photo={this.state.photo} closePhoto={this.closePhoto}/>
                 <SharePdf filename={filename} sharePdfFlag={sharePdfFlag} closeSharePdf={this.closeSharePdf} shareFile={this.shareFile}/>
+                <SharePic sharePicFlag={sharePicFlag} closeSharePic={this.closeSharePic} pic={pic} sharePic={this.sharePic}/>
+                <ShareSofe shareSoftFlag={shareSoftFlag} closeShareWjj={this.closeShareWjj} getHasPro={()=>this.getHasPro()} hasShareSoft={hasShareSoft} createNewPro={this.createNewPro}/>
             </Fragment>
         )
     }

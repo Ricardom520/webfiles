@@ -1,5 +1,6 @@
 import React , {Component, Fragment} from 'react';
 import {Link,withRouter} from 'react-router-dom';
+import { connect } from 'react-redux';
 import '../social.less';
 import {common, icon} from '../../../../images';
 import SingleP from '../../../../components/SingleP';
@@ -44,7 +45,7 @@ class singlep extends Component {
                 <section className='cont3'>
                     <section className='modal line'>
                         <div className='container'>
-                            <p className="header">
+                            <p className="Header">
                                 <h3>单品推荐</h3>
                                 <div>
                                     <span>种类：</span>
@@ -55,7 +56,7 @@ class singlep extends Component {
                                     <Link to="/social/singlep/photo">照片</Link>
                                 </div>
                             </p>
-                            <div className="content">
+                            <div className="Content">
                                 <ul>
                                     <SingleP openModal={this.openModal} type="photo" title="广师铁板烧" num={1125} img={common.mainImg6.default} systemid="ph46782"/>
                                     <SingleP openModal={this.openModal} type="software" title="交友软件" num={1125} img={common.mainImg7.default} systemid="s43572"/>
@@ -73,4 +74,10 @@ class singlep extends Component {
     }
 }
 
-export default withRouter(singlep);
+let mapStateToProps = (state) => {
+    return {
+
+    }
+}
+
+export default connect(mapStateToProps)(withRouter(singlep));

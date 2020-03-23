@@ -1,6 +1,14 @@
 import React, {Component} from 'react';
+import ShareWz from '../../../components/ShareWz';
 import E from 'wangeditor';
+import {
+    Button
+} from 'antd';
 import './editor.less';
+import { connect } from 'react-redux';
+import {
+    submitEditor
+} from '../models/editor';
 //import { inject, observer } from 'mobx-react'
 //import { withRouter } from 'react-router-dom'
 
@@ -9,7 +17,8 @@ class Editor extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            editorContent:''
+            editorContent:'',
+            shareWzlag: false
          };
     }
 
@@ -19,7 +28,6 @@ class Editor extends React.Component {
         const editor = new E(elemMenu,elemBody)
         // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
         editor.customConfig.onchange = html => {
-            console.log(editor.txt.html())
             this.setState({
                 // editorContent: editor.txt.text()
                 editorContent: editor.txt.html()
@@ -52,7 +60,45 @@ class Editor extends React.Component {
 
     };
 
+    showShareWz() {
+        this.setState({
+            shareWzlag: true
+        })
+    }
+
+    submitWz = (filename,desc,bc) => {
+        let editorContent = this.state.editorContent;
+        console.log(editorContent)
+        let userid = sessionStorage.getItem('userid');
+        let username = sessionStorage.getItem('username');
+        this.props.submitEditor({content: editorContent,userid:userid,username:username,filename:filename,desc:desc,bc:bc})
+        this.setState({
+            shareWzlag: false
+        })
+    }
+
+    resetWz() {
+        console.log("重置了")
+        this.setState({
+            editorContent: '',
+        })
+        const elemMenu = this.refs.editorElemMenu;
+        const elemBody = this.refs.editorElemBody;
+        const editor = new E(elemMenu,elemBody)
+        editor.textSelector.innerText = '';
+        editor.textSelector.outerText = '';
+        console.log(editor.textSelector)
+        console.log(this.state)
+    }
+
+    closeShareWz = () => {
+        this.setState({
+            shareWzlag: false
+        })
+    }
+
     render() {
+        let {shareWzlag} = this.state;
         return (
             <div className="shop">
                 <div className="text-area" >
@@ -69,10 +115,27 @@ class Editor extends React.Component {
                         ref="editorElemBody" className="editorElem-body">
 
                     </div>
+                    <div className="submitContainer">
+                        <Button type="primary" onClick={()=>this.showShareWz()}>提交</Button>
+                        <Button onClick={()=>this.resetWz()}>重置</Button>
+                    </div>
                 </div>
+                <ShareWz 
+                    shareWzlag={shareWzlag}
+                    closeShareWz={this.closeShareWz}
+                    submitWz={this.submitWz}
+                />
             </div>
         );
     }
 }
 
-export default Editor;
+let mapStateToProps = (state) => {
+    return {
+        editor: state.Editor
+    }
+}
+
+export default connect(mapStateToProps,{
+    submitEditor,
+})(Editor);

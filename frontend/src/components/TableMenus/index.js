@@ -25,7 +25,7 @@ class TableMenus extends Component {
             case 'xlsx': // excel表格
                 filetype = 7;
                 break;
-            case 'zip': // 压缩包
+            case 'zip' || 'rar': // 压缩包
                 filetype = 5;
                 break;
             case 'docx' || 'doc': // word文档

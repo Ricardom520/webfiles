@@ -21,6 +21,9 @@ import {
     shareFileRequest,
     initMysharesRequest,
     cancelShareRequest,
+    sharePicRequest,
+    getHasProRequest,
+    createNewProRequest,
 } from '../services';
 
 export const initMyfiles = (params) => {
@@ -302,6 +305,7 @@ export const findFileFile = (params) => {
 }
 
 export const shareFile = (params) => {
+    console.log(params)
     return dispatch => {
         shareFileRequest(params)
             .then(res=>{
@@ -339,6 +343,48 @@ export const cancelShare = (params) => {
                     message.success(res.msg);
                 }
                 dispatch({type: actionTypes.CANCELDATA_MYSHARE,payload:params})
+            })
+    }
+}
+
+export const sharePic = (params) => {
+    return dispatch => {
+        sharePicRequest(params)
+            .then(res=>{
+                console.log(res)
+                if (res.code === 0) {
+                    message.success(res.msg);
+                }
+                dispatch({type: actionTypes.SHAREPICDATA_MYFILES})
+            })
+            .catch(error=>{
+                console.log(error)
+            })
+    }
+}
+
+export const getHasPro = (params) => {
+    return dispatch => {
+        getHasProRequest(params)
+            .then(res=>{
+                console.log(res)
+                dispatch({type: actionTypes.GETHASPRO_MYFILES, payload: res})
+            })
+            .catch(error=>{
+                console.log(error)
+            })
+    }
+}
+
+export const createNewPro = (params) => {
+    return dispatch => {
+        createNewProRequest(params)
+            .then(res=>{
+                console.log(res);
+                if (res.code === 0 ) {
+                    message.success(res.msg);
+                }
+                dispatch({type: actionTypes.CREATENEWPRO_MYFILES})
             })
     }
 }

@@ -1,12 +1,38 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
 import {common, icon} from '../../../images';
 import {Link} from 'react-router-dom';
 import SocialHeader from '../../../components/SocialHeader';
 import Like from '../../../components/Like';
 import './live.less';
+import {
+    initLiveData,
+} from '../models/live';
 
 class Live extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            liveData: []
+        }
+    }
+    componentDidMount() {
+        let shareid = this.props.location.search.split('?id=')[1];
+        console.log(shareid)
+        this.props.initLiveData({shareid: shareid})
+    }
+    componentWillReceiveProps(nextProps) {
+        console.log(this.props.Live)
+        let cont = this.cont;
+        cont.innerHTML = this.props.Live.liveData.content;
+        this.setState({
+            liveData: this.props.Live.liveData
+        })
+    }
     render() {
+        console.log(this.state)
+        const {liveData} = this.state;
+        console.log(liveData)
         return (
             <div className="LiveContainer">
                 <SocialHeader/>
@@ -14,20 +40,20 @@ class Live extends Component {
                     <div className="content">
                         <div className="left">
                             <div className="cont1">
-                                <h2>被骂“滚出娱乐圈”的她，如今却成为白富美，走上人生巅峰</h2>
+                                <h2>{liveData.filename}</h2>
                                 <div className="like">
                                     <Like/>
                                 </div>
                             </div>
                             <div className="cont2">
-                                <img src={common.headImg1.default}></img>
+                                <img src={liveData.photo}></img>
                                 <div>
                                     <Link>
-                                        <h5>Ricardom</h5>
+                                        <h5>{liveData.username}</h5>
                                     </Link>
                                     <p>
                                         <span>
-                                            发表于2019.03.11 19:30:55
+                                            发表于{liveData.createtime}
                                         </span>
                                         <span>
                                             字数 895
@@ -41,19 +67,15 @@ class Live extends Component {
                                     </p>
                                 </div>
                             </div>
-                            <div className="cont3">
-                                <p>
-                                说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。
-                                </p>
-                                <img src={common.live1.default}></img>
+                            <div className="cont3" ref={cont=>this.cont=cont}>
                             </div>
                         </div>
                         <div className="right">
                             <div className="selfContainer">
                                 <div className="header">
-                                    <img src={common.headImg1.default}></img>
+                                    <img src={liveData.photo}></img>
                                     <Link>
-                                        <h5>Ricardom</h5>
+                                        <h5>{liveData.username}</h5>
                                     </Link>
                                 </div>
                                 <div className="bodyer">
@@ -102,4 +124,12 @@ class Live extends Component {
     }
 }
 
-export default Live;
+const mapStateToProps = (state) => {
+    return {
+        Live: state.Live
+    }
+}
+
+export default connect(mapStateToProps,{
+    initLiveData,
+})(Live);
