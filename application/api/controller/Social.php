@@ -6,6 +6,30 @@ use think\Controller;
 
 class Social extends Controller 
 {
+    public function nrjx(Request $request)
+    {
+        header('Access-Control-Allow-Origin: *');
+        $pdfsql = 'Select filename, shareid, liked, visted, fav, bc, sharetime from sharespdf order by liked limit 5';
+        $pdfres = Db::query($pdfsql);
+        $picsql = 'Select filename, shareid, liked, visted, fav, bc, sharetime from sharespic order by liked limit 5';
+        $picres = Db::query($pdfsql);
+        $wjjsql = 'Select filename, shareid, liked, visted, fav, bc, sharetime from shareswjj order by liked limit 5';
+        $wjjres = Db::query($wjjsql);
+        $wzsql = 'Select filename, shareid, liked, visted, fav, bc, sharetime from shareswz order by liked limit 5';
+        $wzres = Db::query($wzsql);
+
+        $res = array_merge($pdfres,$picres,$wjjres,$wzres);
+        $this->merge($res);
+
+        $len = count($res);
+        for ($i = $len - 1; $i > $len - 6; $i--)
+        {
+            $res[$i]['sharetime'] = date('Y.m.d', strtotime($res[$i]['sharetime']));
+            $temp[] = $res[$i];
+        }
+        return $temp;
+    }
+
     public function pdf(Request $request)
     {
         header('Access-Control-Allow-Origin: *');
@@ -114,6 +138,53 @@ class Social extends Controller
             } else {
                 return;
             }   
+        }
+    }
+
+    private function merge(&$arr)
+    {
+        $len = count($arr);
+        $this->mergeSort($arr, 0, $len - 1);
+    }
+
+    private function mergeSort(&$arr, $left, $right)
+    {
+        if ($left < $right)
+        {
+            $center = floor(($left + $right)/2);
+            $this->mergeSort($arr, $left, $center);
+            $this->mergeSort($arr, $center + 1, $right);
+            $this->merge_array($arr, $left, $center, $right);
+        }
+    }
+
+    private function merge_array(&$arr, $left, $center, $right)
+    {
+        $a_i = $left;
+        $b_i = $center + 1;
+        while($a_i <= $center && $b_i <= $right)
+        {
+            if ($arr[$a_i]['liked'] < $arr[$b_i]['liked'])
+            {
+                $temp[] = $arr[$a_i++];
+            }
+            else 
+            {
+                $temp[] = $arr[$b_i++];
+            }
+        }
+        while ($a_i <= $center) 
+        {
+            $temp[] = $arr[$a_i++];
+        }
+        while ($b_i <= $center)
+        {
+            $temp[] = $arr[$b_i++];
+        }
+        $len = count($temp);
+        for ($i = 0; $i < $len; $i++)
+        {
+            $arr[$i+$left] = $temp[$i];
         }
     }
 }

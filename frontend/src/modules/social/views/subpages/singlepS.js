@@ -9,7 +9,8 @@ import RecomBP from '../../../../components/RecomBP';
 import Photos from '../../../../components/Photos';
 const pdful = require('../染色体.pdf');
 import {
-    initDataSoftware
+    initDataSoftware,
+    clearSoftData,
 } from '../../models/social';
 
 class singlepS extends Component {
@@ -18,6 +19,7 @@ class singlepS extends Component {
         this.state = {
             visiably: true,
             softData: [],
+            index: 0,
         }
     }
     componentDidMount() {
@@ -29,7 +31,7 @@ class singlepS extends Component {
                             || (e.srcElement?e.srcElement.body.scrollTop : 0);
         let n;
         let index = this.state.index;
-        if (100 < scrollTop && scrollTop < 300) {
+        if (90 < scrollTop && scrollTop < 300) {
             n = 1;
             if (n < index) {
                 return;
@@ -48,7 +50,14 @@ class singlepS extends Component {
                 })
             }
         }
-        if (index < n && 1 <= n) {
+        if (index == 0 && n == 1) {
+            index = 1;
+            this.setState({
+                index:index
+            })
+            this.props.initDataSoftware({index: index})
+        }
+        if (index < n && 1 < n && index < 1) {
             this.props.initDataSoftware({index: index})
         }
     }
@@ -58,16 +67,9 @@ class singlepS extends Component {
         })
     }
     openModal = (type,systemid) => {
-        if (type == "photo" || type === "photo") {
-            this.setState({
-                visiably: false
-            })
-        } else if (type == "software" || type === "software") {
+        if (type == "software" || type === "software") {
             this.props.history.push(`/software/?id=${systemid}`)
-        } else if (type == 'pdf' || type === "pdf") {
-            window.open(pdful.default, '_blank');
-        } else if (type == 'live' || type === "live") {
-            this.props.history.push(`/live/?id=${systemid}`)
+            this.props.clearSoftData();
         }
     }
     hideModal = () => {
@@ -76,6 +78,7 @@ class singlepS extends Component {
         })
     }
     render() {
+        console.log(this.state.index)
         const {visiably,softData} = this.state;
         return (
             <Fragment>
@@ -121,4 +124,5 @@ let mapStateToProps = (state) => {
 
 export default connect(mapStateToProps,{
     initDataSoftware,
+    clearSoftData,
 })(withRouter(singlepS));

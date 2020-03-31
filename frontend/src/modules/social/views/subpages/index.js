@@ -1,4 +1,5 @@
 import React , {Component, Fragment} from 'react';
+import { connect } from 'react-redux';
 import {Link,withRouter} from 'react-router-dom';
 import '../social.less';
 import {common, icon} from '../../../../images';
@@ -6,6 +7,9 @@ import SingleP from '../../../../components/SingleP';
 import ContentS from '../../../../components/ContentS';
 import RecomBP from '../../../../components/RecomBP';
 import Photos from '../../../../components/Photos';
+import {
+    initSocialnrjx,
+} from '../../models/social';
 const pdful = require('../染色体.pdf');
 
 class SocialIndex extends Component {
@@ -13,8 +17,12 @@ class SocialIndex extends Component {
         super(props);
         this.state = {
             visiably: true,
-            pics: []
+            pics: [],
+            nrjx: [],
         }
+    }
+    componentDidMount() {
+        this.props.initSocialnrjx();
     }
     openModal = (type,systemid) => {
         console.log(type)
@@ -38,8 +46,13 @@ class SocialIndex extends Component {
             visiably: true
         })
     }
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            nrjx: this.props.socials.nrjxData
+        })
+    }
     render() {
-        const {visiably,pics} = this.state;
+        const {visiably,pics,nrjx} = this.state;
         return (
             <Fragment>
                 <section className='cont2'>
@@ -51,11 +64,13 @@ class SocialIndex extends Component {
                             </p>
                             <div className="Content">
                                 <ul>
-                                    <ContentS img={common.mainImg1.default} title="你的书写工具需要一个庇护所" time="2020.1.8" fav="2255" writer="Ricardom" like="1250"/>
-                                    <ContentS img={common.mainImg2.default} title="你的书写工具需要一个庇护所" time="2020.1.8" fav="2255" writer="Ricardom" like="1250"/>
-                                    <ContentS img={common.mainImg3.default} title="你的书写工具需要一个庇护所" time="2020.1.8" fav="2255" writer="Ricardom" like="1250"/>
-                                    <ContentS img={common.mainImg4.default} title="你的书写工具需要一个庇护所" time="2020.1.8" fav="2255" writer="Ricardom" like="1250"/>
-                                    <ContentS img={common.mainImg5.default} title="你的书写工具需要一个庇护所" time="2020.1.8" fav="2255" writer="Ricardom" like="1250"/>
+                                    {
+                                        Object.keys(nrjx).length? nrjx.map(item=>{
+                                            return (
+                                                <ContentS img={item.bc?item.bc:common.mainImg4.default} title={item.filename} time={item.sharetime} fav={item.fav} writer="Ricardom" like={item.liked}/>
+                                            )
+                                        }):''
+                                    }
                                 </ul>
                             </div>
                         </div>
@@ -112,4 +127,12 @@ class SocialIndex extends Component {
     }
 }
 
-export default withRouter(SocialIndex);
+const mapStateToProps = (state) => {
+    return {
+        socials: state.Social
+    }
+}
+
+export default connect(mapStateToProps, {
+    initSocialnrjx,
+})(withRouter(SocialIndex));

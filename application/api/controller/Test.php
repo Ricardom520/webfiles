@@ -3,10 +3,12 @@ namespace app\api\controller;
 use think\Controller;
 use think\Cache;
 use think\cache\driver\Redis;
+use think\Request;
+use think\Redies;
 class Test extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {    
         /*$han = new Cache;
         // halt($han);
@@ -20,8 +22,9 @@ class Test extends Controller
             echo "从缓存取得<br>";
             print_r($result);
         } else {
-            $cache = Db::name
+            //$cache = Db::name
         }
+        return request()->ip();
     }
 
 }

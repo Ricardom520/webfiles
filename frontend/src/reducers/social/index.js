@@ -5,6 +5,7 @@ let initState = {
     liveData: [],
     photoData: [],
     softData: [],
+    nrjxData: [],
 }
 
 export default (state = initState, action) => {
@@ -40,6 +41,12 @@ export default (state = initState, action) => {
             }
             let setsoft = new Set(state.softData);
             state.softData = Array.from(setsoft);
+            return {...state};
+        case actionTypes.CLEARDATA_SOFT:
+            state.softData = [];
+            return {...state};
+        case actionTypes.INITDATANRJX_SOCIAL:
+            state.nrjxData = action.payload;
             return {...state};
         default:
             return state;

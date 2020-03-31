@@ -1,5 +1,9 @@
 import service from '../../../services';
 
+export const initSocialnrjxRequest = (params) => { // 初始化社区首页内容精选
+    return service.get('/api/social/nrjx', {params:params})
+}
+
 export const initDataPdfRequest = (params) => { // 初始化论文社区
     return service.get('/api/social/pdf', {params:params})
 }

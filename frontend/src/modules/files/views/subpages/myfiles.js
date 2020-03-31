@@ -194,10 +194,10 @@ class Myfiles extends Component {
         let userid = sessionStorage.getItem('userid');
         this.props.getHasPro({userid:userid});
     }
-    createNewPro = (filename,desc,bc,systemid) => {
+    createNewPro = (filetitlename,desc,bc,systemid) => {
         let userid = sessionStorage.getItem('userid');
         console.log(bc)
-        this.props.createNewPro({userid: userid, filename: filename, desc: desc, bc: bc, systemid: systemid})
+        this.props.createNewPro({userid: userid, filetitlename: filetitlename, desc: desc, bc: bc, systemid: systemid})
     }
     render() {
         let {myfilesData,location,content,favorited,fbType,hasShareSoft} = this.state;

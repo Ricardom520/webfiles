@@ -35,6 +35,8 @@ export default {
 
     initDATA_SELFPHOTO: 'initDATA_SELFPHOTO', // 初始化头像
 
+    INITDATANRJX_SOCIAL: 'INITDATANRJX_SOCIAL', // 初始化社区
+
     INITDATA_PDF: 'INITDATA_PDF', // 初始化论文模块
     OPENDATA_PDF: 'OPENDATA_PDF', // 打开社区pdf文件
 
@@ -46,4 +48,7 @@ export default {
     INITDATA_PHOTO: 'INITDATA_PHOTO', // 初始化图片模块
 
     INITDATA_SOFT: 'INITDATA_SOFT', // 初始化软件模块
+    CLEARDATA_SOFT: 'CLEARDATA_SOFT', // 清除软件模块数据
+    INITDATA_SOFTWARE: 'INITDATA_SOFTWARE', // 初始化软件页
+    INIITDATA_COMMON: 'INIITDATA_COMMON', // 初始化评论区
 }

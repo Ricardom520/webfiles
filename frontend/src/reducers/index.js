@@ -12,6 +12,7 @@ import Explorer from './explorer';
 import Social from './social';
 import Editor from './editor';
 import Live from './live';
+import Software from './software';
 
 export default combineReducers({
     Register,
@@ -27,4 +28,5 @@ export default combineReducers({
     Social,
     Editor,
     Live,
+    Software,
 })

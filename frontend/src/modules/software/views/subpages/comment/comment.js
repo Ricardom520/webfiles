@@ -24,6 +24,7 @@ class Comment2 extends Component {
                 editorContent: editor.txt.html()
             })
         }
+
         editor.customConfig.menus = [
             'head',  // 标题
             'bold',  // 粗体
@@ -61,6 +62,9 @@ class Comment2 extends Component {
         if (participant[0].style.display == 'flex') {
             participant[0].style.display = 'none';
         }
+    }
+    componentWillReceiveProps(nextProps) {
+
     }
     render() {
         return (

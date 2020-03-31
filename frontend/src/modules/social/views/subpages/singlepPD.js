@@ -53,8 +53,15 @@ class singlepPD extends Component {
                 })
             }
         }
-        if (index < n && 1 <= n) {
-            this.props.initDataPdf({index: index})
+        if (index == 0 && n == 1) {
+            index = 1;
+            this.setState({
+                index:index
+            })
+            this.props.initDataLive({index: index})
+        }
+        if (index < n && 1 < n && index < 1) {
+            this.props.initDataLive({index: index})
         }
     }
     componentWillReceiveProps(nextProps) {

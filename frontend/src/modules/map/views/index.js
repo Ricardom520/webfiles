@@ -10,13 +10,25 @@ class Map extends Component {
     }
     renderMap() {
         let map=new window.BMap.Map("orderDetailMap"); //初始化地图，这个id和下面的id相对应，之所以将初始化的地图放到this对象上，是方便其他方法调用map对象
-        map.centerAndZoom(new BMap.Point(116.404, 39.915), 14);
         map.addControl(new BMap.NavigationControl()); // 添加平移缩放控件
         map.addControl(new BMap.OverviewMapControl()); //添加缩略地图控件
         map.enableScrollWheelZoom(); //启用滚轮放大缩小
         map.setMapStyle({ style: "mapbox" });
-
+        console.log("激动了")
+        // 获取当前位置
+        let geolocation = new BMap.Geolocation();
+        geolocation.enableSDKLocation();
+        geolocation.getCurrentPosition(function(r) {
+            console.log(r)
+            let mk = new BMap.Marker(r.point);
+            map.addOverlay(mk);
+            map.panTo(r.point);
+            let pt = r.point;   
+            map.panTo(pt);//移动地图中心点
+            map.centerAndZoom(new BMap.Point(r.point.lng,r.point.lat), 20);
+        })
     }
+
     render() {
         return (
             <div className="mapContainer">
@@ -27,10 +39,10 @@ class Map extends Component {
                         </h3>
                     </Link>
                     <Content>
-                        <Form>
-                            <input type="search" placeholder="find more..."/>
-                            <button>搜索</button>
-                        </Form>
+                        {/*<Form>
+                            <input type="search" placeholder="find more..." ref={search=>this.search=search}/>
+                            <button onClick={()=>this.find()}>搜索</button>
+                        </Form>*/}
                     </Content>
                 </Header>
                 <div id="orderDetailMap" className="orderDetailMap">

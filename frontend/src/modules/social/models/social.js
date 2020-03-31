@@ -4,7 +4,21 @@ import {
     initDataLiveRequest,
     initDataPhotoRequest,
     initDataSoftwareRequest,
+    initSocialnrjxRequest,
 } from '../services';
+
+export const initSocialnrjx = (params) => {
+    return dispatch => {
+        initSocialnrjxRequest(params)
+            .then(res=>{
+                console.log(res)
+                dispatch({type: actionTypes.INITDATANRJX_SOCIAL, payload: res})
+            })
+            .catch(error=>{
+                console.log(error)
+            })
+    }
+}
 
 export const initDataPdf = (params) => {
     return dispatch => {
@@ -64,4 +78,8 @@ export const initDataSoftware = (params) => {
                 console.log(error)
             })
     }
+}
+
+export const clearSoftData = (params) => {
+    return ({type: actionTypes.CLEARDATA_SOFT})
 }

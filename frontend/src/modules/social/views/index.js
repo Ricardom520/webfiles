@@ -41,17 +41,19 @@ class Social extends Component {
     }
     criticality = (boundary, flag) => {
         let slide = document.querySelector('.slideContainer');
-        let width = slide.childNodes[0].offsetWidth;
-        let currentIndex = this.state.currentIndex;
-        this.play(-(width*currentIndex),boundary);
+        if (slide) {
+            let width = slide.childNodes[0].offsetWidth;
+            let currentIndex = this.state.currentIndex;
+            this.play(-(width*currentIndex),boundary);
 
-        setTimeout(function() {
-            slide.style.left = -width*boundary + 'px';
-            slide.style.transition = 'left 0s';
-        }, 1500);
-        this.setState({
-            currentIndex: boundary
-        })
+            setTimeout(function() {
+                slide.style.left = -width*boundary + 'px';
+                slide.style.transition = 'left 0s';
+            }, 1500);
+            this.setState({
+                currentIndex: boundary
+            })
+        }
     }
     play = (left, activeIndex) => {
         let slide = document.querySelector('.slideContainer');

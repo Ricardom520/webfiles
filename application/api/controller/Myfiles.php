@@ -277,7 +277,7 @@ class Myfiles extends Controller
         $res = Db::query($sql);
         if($filetype == 9) {
             $Insql = 'Insert into sharespdf (shareid,userid,systemid,filename,content,nc,username,sharetime,disc,bc) values 
-            ("'.$shareid.'","'.$userid.'","'.$systemid.'","'.$filename.'","'.$res[0]['content'].'","'
+            ("'.$shareid.'","'.$userid.'","'.$systemid.'","'.$rfilename.'","'.$res[0]['content'].'","'
             .$res[0]['nc'].'","'.$res[0]['username'].'","'.$sharetime.'","'.$disc.'","'.$bc.'")';
         }
         Db::query($Insql);
@@ -340,7 +340,7 @@ class Myfiles extends Controller
         $userid = $data['userid'];
         $systemid = $data['systemid'];
         $bc = $data['bc'];
-        $filename = $data['filename'];
+        $filetitlename = $data['filetitlename'];
         $disc = $data['desc'];
         $shareid = 'S'.substr($userid,0,2).time().rand(10,100).'3';
         $sharetime = date('Y-m-d H:i:s');
@@ -348,8 +348,8 @@ class Myfiles extends Controller
         Db::query($Upsql);
         $Sesql = 'Select content from files where userid ="'.$userid.'" and systemid ="'.$systemid.'"';
         $res = Db::query($Sesql);
-        $Insql = 'Insert into shareswjj (shareid,userid,systemid,filename,disc,content,sharetime,updatetime,bc) values("'.$shareid
-                .'","'.$userid.'","'.$systemid.'","'.$filename.'","'.$disc.'","'.$res[0]['content'].'","'.$sharetime.'","'.$sharetime.'","'.$bc.'")';
+        $Insql = 'Insert into shareswjj (shareid,userid,systemid,filename,disc,content,sharetime,updatetime,bc,filetitlename) values("'.$shareid
+                .'","'.$userid.'","'.$systemid.'","'.$filename.'","'.$disc.'","'.$res[0]['content'].'","'.$sharetime.'","'.$sharetime.'","'.$bc.'","'.$filetitlename.'")';
         Db::query($Insql);
         $arr = array(
             'code'=>0,
