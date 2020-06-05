@@ -4,7 +4,12 @@ import {
 } from 'antd';
 import PDF from 'react-pdf-js';
 import './pdf.less';
-
+import {
+  openDataPdfRequest,
+} from '../social/services';
+import {
+  ReadPdfRequest
+} from '../files/services';
 class Pdf extends Component {
     constructor(props) {
         super(props);
@@ -38,10 +43,29 @@ class Pdf extends Component {
     
     componentDidMount() {
         console.log(this.props)
-        let data = this.props.location.search.split("?data=")[1];
-        this.setState({
-            content: data
-        })
+        let shareid = this.props.location.search.split('?shareid=')[1];
+        console.log(shareid)
+        let fid = this.props.location.search.split("?fid=")[1];
+        if (shareid) {
+          openDataPdfRequest({shareid:shareid})
+          .then(res=>{
+              console.log(res)
+              //console.log(res.content)
+              this.setState({
+                content: res[0].content
+              })
+          })
+        } else {
+          ReadPdfRequest({fid:fid})
+          .then(res=>{
+              console.log(res)
+              console.log
+              //console.log(res.content)
+              this.setState({
+                content: res.content
+              })
+          })
+        }
     }
     onMouseEnter() {
       this.setState({
@@ -57,7 +81,6 @@ class Pdf extends Component {
         const {
             content
           } = this.state;
-
         return(
           <div className="pdfContainer">
             <div className="Content">

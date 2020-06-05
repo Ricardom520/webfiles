@@ -103,21 +103,19 @@ class Editor extends React.Component {
             <div className="shop">
                 <div className="text-area" >
                     <div ref="editorElemMenu"
-                         style={{backgroundColor:'#f1f1f1',}}
-                         className="editorElem-menu">
-
+                      style={{backgroundColor:'#f1f1f1',}}
+                      className="editorElem-menu">
                     </div>
                     <div
-                        style={{
-                            height:'100%',
-                            borderTop:"none"
-                        }}
-                        ref="editorElemBody" className="editorElem-body">
-
+                      style={{
+                          height:'100%',
+                          borderTop:"none"
+                      }}
+                      ref="editorElemBody" className="editorElem-body">
                     </div>
                     <div className="submitContainer">
-                        <Button type="primary" onClick={()=>this.showShareWz()}>提交</Button>
-                        <Button onClick={()=>this.resetWz()}>重置</Button>
+                      <Button type="primary" onClick={()=>this.showShareWz()}>提交</Button>
+                      <Button onClick={()=>this.resetWz()}>重置</Button>
                     </div>
                 </div>
                 <ShareWz 

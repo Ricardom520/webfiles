@@ -12,6 +12,12 @@ import Users from './subpages/users';
 import Rules from './subpages/rules';
 
 class Admin extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      menus: true
+    }
+  }
     componentDidMount() {
         let pathname = this.props.location.pathname;
         let menus = this.menus;
@@ -82,10 +88,18 @@ class Admin extends Component {
         }
         target.classList.add('active');
     }
+    showMenus() {
+      this.setState({
+        menus: !this.state.menus
+      })
+      console.log(this.state)
+    }
     render() {
+      const {menus} = this.state;
+      console.log(menus)
         return (
             <div className="adminContainer">
-                <div className="leftContainer">
+                <div className={menus?"leftContainer active":'leftContainer'}>
                     <div className="headerContainer">
                         <img src={common.logoIcon.default}></img>
                         <img src={common.logoText.default}></img>
@@ -129,7 +143,7 @@ class Admin extends Component {
                 </div>
                 <div className="rightContainer">
                     <div className="headerContainer">
-                        <img src={common.button.default} className="menusImg"></img>
+                        <img src={common.button.default} className="menusImg" onClick={()=>this.showMenus()}></img>
                         <div>
                             <img src={common.news.default}></img>
                             <img src={common.adminPhoto.default} className="adminPhoto"></img>

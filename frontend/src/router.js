@@ -12,6 +12,12 @@ const Login = Loadable({
   delay: 100
 });
 
+const AdminLogin = Loadable({
+  loader: () => import('./modules/login/views/adminLogin'),
+  loading: LoadingComponent,
+  delay: 100
+})
+
 const Register = Loadable({
   loader: () => import('./modules/register/views'),
   loading: LoadingComponent,
@@ -97,6 +103,7 @@ class Routers extends React.Component {
       <Router>
         <Switch>
             <Route path="/login" component={Login}/>
+            <Route path="/adminlogin" component={AdminLogin}/>
             <Route path="/register" component={Register}/>
             <Route path="/find" component={Find}/>
             <Route path="/social" component={Social}/>

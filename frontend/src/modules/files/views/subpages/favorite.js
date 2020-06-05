@@ -1,6 +1,7 @@
 import React, {Component,Fragment} from 'react';
 import { connect } from 'react-redux';
 import Table from '../../../../components/Tables';
+import Load from '../../../../components/Load';
 import { icon, common } from '../../../../images/index';
 import {
     initFavourite,
@@ -17,6 +18,10 @@ import {
     cancelToMyfile,
 } from '../../models/files';
 import '../files.less';
+import {
+  downloadFileRequest,
+  getsharePicRequest,
+} from '../../services';
 
 class Favour extends Component {
     constructor(props) {
@@ -25,6 +30,8 @@ class Favour extends Component {
             favoriteData: [],
             location: '',
             favour: true,
+            fbType: 0,
+            hasShareSoft: []
         }
     }
     componentDidMount() {
@@ -114,6 +121,11 @@ class Favour extends Component {
         let blob = new Blob(byteArrays, {type: contentType});
         return blob;
     }
+    changeSort = (type) => {
+      this.setState({
+          fbType: type
+      })
+    }
     findFile(e) { // 寻找文件
         let value = e.target.value;
         console.log(value)
@@ -154,6 +166,7 @@ class Favour extends Component {
         for (let i = 0; i < fileLists.length; i++) {
             location += '/' + fileLists[i].filename;
         }
+        console.log(this.props.favorites)
         this.setState({
             location: location,
             favoriteData: this.props.favorites.favoriteData
@@ -161,7 +174,7 @@ class Favour extends Component {
         console.log(nextprops)
     }
     render() {
-        let {favoriteData,location,content,favour} = this.state;
+        let {favoriteData,location,content,favour,fbType,hasShareSoft} = this.state;
         let {curParentid,fileLists} = this.props.favorites;
         let columns  = [
             {
@@ -243,7 +256,27 @@ class Favour extends Component {
                             <button></button>
                         </div>
                     </div>
-                    <div className='tables'>
+                    {
+                        fbType ?
+                            <Block
+                                dataSource={favoriteData} 
+                                initData={this.initFavourite} 
+                                pasteFile={this.pasteFile}
+                                curParentid={curParentid}
+                                handleNewName={this.handleNewName}
+                                deleteFile={this.deleteFile}
+                                shearFile={this.shearFile}
+                                location={location}
+                                createFile={this.createFile}
+                                uploadFile={this.uploadFile}
+                                downloadFile={this.downloadFile}
+                                content={content}
+                                addToFavourite={this.addToFavourite}
+                                changeSort={this.changeSort}
+                                getsharePicRequest={getsharePicRequest}
+                                sharePic={this.sharePic}
+                            />
+                             : <div className='tables'>
                         <Table 
                             columns={columns} 
                             dataSource={favoriteData} 
@@ -258,11 +291,20 @@ class Favour extends Component {
                             uploadFile={this.uploadFile}
                             downloadFile={this.downloadFile}
                             content={content}
-                            favour={favour}
-                            cancelToMyfile={this.cancelToMyfile}
+                            addToFavourite={this.addToFavourite}
+                            changeSort={this.changeSort}
+                            shareFile={this.shareFile}
+                            getsharePicRequest={getsharePicRequest}
+                            sharePic={this.sharePic}
+                            getHasPro={this.getHasPro}
+                            hasShareSoft={hasShareSoft}
+                            createNewPro={this.createNewPro}
                         />
                     </div>
+                    }
                 </div>
+                <a ref={download=>this.download=download} style={{display:'none'}} download>下载隐藏按钮</a>
+                <Load/>
             </Fragment>
         )
     }

@@ -2,6 +2,7 @@ import actionTypes from '../../../actions/actionType';
 import {
     initSoftwareRequest,
     initCommonRequest,
+    submitCommonRequest,
 } from '../services';
 
 export const initSoft = (params) => {
@@ -28,4 +29,17 @@ export const initCommon = (params) => {
                 console.log(error)
             })
     }
+}
+
+export const submitCommon = (params) => {
+  return dispatch => {
+    submitCommonRequest(params)
+      .then(res=>{
+        console.log(res)
+        dispatch({type: actionTypes.SUBMIT_COMMON, payload: res})
+      })
+      .catch(error=>{
+        console.log(error)
+      })
+  }
 }

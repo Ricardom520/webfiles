@@ -11,3 +11,7 @@ export const downloadFileRequest = (params) => {
 export const initCommonRequest = (params) => {
     return service.get('/api/software/common', {params:params});
 }
+
+export const submitCommonRequest = (params) => {
+  return service.post('/api/software/subcom', {...params})
+}

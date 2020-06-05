@@ -90,6 +90,7 @@ const common= {
     female: require('./common/female.png'),
     button: require('./common/button.png'),
     nofile: require('./common/nofile.jpg'),
+    nocommon: require('./common/nocommon.jpg'),
 }
 
 export {

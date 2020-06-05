@@ -123,3 +123,7 @@ export const getHasProRequest = (params) => {
 export const createNewProRequest = (params) => {
     return service.post('/api/myfiles/createsoft', {...params})
 }
+
+export const ReadPdfRequest = (params) => {
+  return service.get('/api/myfiles/openpdf', {params: params})
+}

@@ -5,6 +5,7 @@ import {
     initDataPhotoRequest,
     initDataSoftwareRequest,
     initSocialnrjxRequest,
+    initSocialdptjRequest,
 } from '../services';
 
 export const initSocialnrjx = (params) => {
@@ -18,6 +19,19 @@ export const initSocialnrjx = (params) => {
                 console.log(error)
             })
     }
+}
+
+export const initSocialdptj = (params) => {
+  return dispatch => {
+    initSocialdptjRequest(params)
+      .then(res=>{
+        console.log(res)
+        dispatch({type: actionTypes.INITDATADPTJ_SOCIAL, payload: res})
+      })
+      .catch(error=> {
+        console.log(error)
+      })
+  }
 }
 
 export const initDataPdf = (params) => {

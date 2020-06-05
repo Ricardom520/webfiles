@@ -19,7 +19,7 @@ class Editor extends Controller
         $bc = $data['bc'];
         $desc = $data['desc'];
         $shareid = 'S'.substr($userid,0,2).time().rand(10,100).'1';
-        $sql = 'Insert into shareswz (shareid, userid, username, content, disc, filename, createtime, bc, filetype) values ("'.$shareid
+        $sql = 'Insert into shareswz (shareid, userid, username, content, disc, filename, sharetime, bc, filetype) values ("'.$shareid
                 .'","'.$userid.'","'.$username.'",\''.$content.'\',"'.$desc.'",\''.$filename.'\',"'.$curretData.'","'.$bc.'","live")';
         Db::query($sql);
         $arr = array(

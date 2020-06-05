@@ -132,20 +132,16 @@ class Table extends Component {
     }
     // 复制文件
     copyFile = () => {
-        console.log("复制了")
-        console.log(this.state)
         this.setState({
             trMenus: false,
             copySystemid: this.state.systemid,
             copyParentid: this.state.parentid
         })
-        console.log(this.state)
     }
     // 粘贴文件
     pasteFile = () => {
         const {copySystemid, copyParentid} = this.state;
-            
-        this.props.pasteFile(copyParentid,copySystemid,curParentid);
+        this.props.pasteFile(copyParentid,copySystemid,this.props.curParentid);
         this.setState({
             trMenus: false
         })
@@ -179,10 +175,7 @@ class Table extends Component {
             this.props.initData(systemid,filename,favour);
         }
         if (filetype == 9) {
-            downloadFileRequest(params)
-                .then(res=>{
-                    window.open('/#/pdf?data='+res.content, '_blank');
-                })
+          window.open('/#/pdf?fid='+systemid, '_blank');
         }
         if (filetype == 1 || filetype == 5 || filetype == 6 || filetype == 7 || filetype == 8) {
             message.warning("该格式暂不支持在线浏览");
@@ -205,14 +198,8 @@ class Table extends Component {
             this.props.initData(systemid,filename,favour);
         }
         if (filetype == 9) {
-            downloadFileRequest(params)
-                .then(res=>{
-                    let dataURL = res.content;
-                    let iframe = document.createElement('iframe');
-                    iframe.name = "test";
-                    iframe.src = dataURL;
-                    window.open('/#/pdf?data='+res.content, '_blank');
-                })
+          console.log("及拿来了吗")
+          window.open('/#/pdf?fid='+systemid, '_blank');
         }
         if (filetype == 1 || filetype == 5 || filetype == 6 || filetype == 7 || filetype == 8 || filetype == 3 || filetype == 4) {
             message.warning("该格式暂不支持在线浏览");
@@ -377,10 +364,46 @@ class Table extends Component {
             shareSoftFlag: false
         })
     }
+    onClickDiv(e) {
+      let type = e._targetInst.type;
+      if (type == 'div') {
+        this.setState({
+            tbodyMenus: false,
+            trMenus: false
+        })
+        let tBody = this.tBody;
+    
+        let trs = tBody.getElementsByTagName('tr');
+        console.log(trs);
+        for (let i = 0; i < trs.length; i++) {
+            trs[i].classList.remove('active');
+        }
+      }
+    }
+    onContextDivMenu(e) {
+      let target = e.target;
+      let type = e._targetInst.type;
+      let x = e.nativeEvent.screenX;
+      let y = e.nativeEvent.screenY;
+      let tbodymenus = document.getElementById('tbodymenus');
+      this.setState({
+          tbodyMenus: true,
+          trMenus: false
+      })
+      if (x + 185 <= document.body.clientWidth) {
+          tbodymenus.style.left = x + 5 + 'px';
+          tbodymenus.style.top = y - 100 + 'px';
+      } else {
+          tbodymenus.style.left = document.body.clientWidth - 200 + 'px';
+          tbodymenus.style.top = y - 100 + 'px';
+      }
+      e.preventDefault();
+    }
     render() {
         let {columns,dataSource,location,favour,file,changeSort,share,hasShareSoft} = this.props;
         let {tbodyMenus,trMenus,copySystemid,renameFlag,filename,attributeFlag,filetype,filesize,createtime,systemid,sharePdfFlag,sharePicFlag,pic,shareSoftFlag} = this.state;
         console.log(this.state)
+        console.log(dataSource)
         return (
             <Fragment>
                 <table cellSpacing="0" cellPadding="0" className="tableContainer">
@@ -395,7 +418,7 @@ class Table extends Component {
                     </thead>
                     <tbody onContextMenu={(e)=>this.onContextTbodyMenu(e)} onClick={(e=>this.onClickTbody(e))} ref={tBody=>this.tBody=tBody}>
                         {
-                            Object.keys(dataSource).length?dataSource.map(item=>{
+                            Object.keys(dataSource).length > 0?dataSource.map(item=>{
                                 return(
                                     <tr 
                                         onContextMenu={(e)=>this.onContextTrMenu(e,item.systemid,item.parentid,item.filetype,item.filename,item.filesize,item.createtime,item.filetype_hz)} 
@@ -422,7 +445,7 @@ class Table extends Component {
                                         }
                                     </tr>
                                 )
-                            }): <div className="nofileContainer">
+                            }): <div className="nofileContainer" onContextMenu={(e)=>this.onContextDivMenu(e)} onClick={(e=>this.onClickDiv(e))}>
                                     <img src={common.nofile.default}></img>
                             </div>
                         }

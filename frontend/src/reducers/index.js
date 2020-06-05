@@ -13,6 +13,7 @@ import Social from './social';
 import Editor from './editor';
 import Live from './live';
 import Software from './software';
+import Admin from './admin';
 
 export default combineReducers({
     Register,
@@ -29,4 +30,5 @@ export default combineReducers({
     Editor,
     Live,
     Software,
+    Admin
 })

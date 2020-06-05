@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
+import E from 'wangeditor';
 import {common, icon} from '../../../../../images';
 import Comment2 from './comment';
 import './comment.less';
 import { connect } from 'react-redux';
 import {
-    initCommon
+    initCommon,
+    submitCommon
 } from '../../../models/software';
 
 class Comment extends Component {
@@ -15,7 +17,8 @@ class Comment extends Component {
             hasComment: false,
             timeMenus: false,
             writeMenus: false,
-            commons: []
+            commons: [],
+            editorContent: ''
         }
     }
     componentDidMount() {
@@ -26,6 +29,41 @@ class Comment extends Component {
         console.log(search)
         let shareid = search.split('?id=')[1];
         this.props.initCommon({shareid: shareid});
+        const elemMenu = this.refs.editorElemMenu;
+        const elemBody = this.refs.editorElemBody;
+        const editor = new E(elemMenu,elemBody)
+        // 使用 onchange 函数监听内容的变化，并实时更新到 state 中
+        editor.customConfig.onchange = html => {
+            console.log(editor.txt.html())
+            this.setState({
+                // editorContent: editor.txt.text()
+                editorContent: editor.txt.text()
+            })
+        }
+
+        editor.customConfig.menus = [
+            'head',  // 标题
+            'bold',  // 粗体
+            'fontSize',  // 字号
+            'fontName',  // 字体
+            'italic',  // 斜体
+            'underline',  // 下划线
+            'strikeThrough',  // 删除线
+            'foreColor',  // 文字颜色
+            'backColor',  // 背景颜色
+            'link',  // 插入链接
+            'list',  // 列表
+            'justify',  // 对齐方式
+            'quote',  // 引用
+            'emoticon',  // 表情
+            'image',  // 插入图片
+            'table',  // 表格
+            'code',  // 插入代码
+            'undo',  // 撤销
+            'redo'  // 重复
+        ]
+        editor.customConfig.uploadImgShowBase64 = true
+        editor.create()
     }
     componentWillReceiveProps(nextProps) {
         let pathname = nextProps.location.pathname;
@@ -68,6 +106,31 @@ class Comment extends Component {
             })
         }
     }
+    submit() {
+      console.log("发送了")
+      console.log(this.state.editorContent)
+      let value = this.state.editorContent;
+      console.log(sessionStorage)
+      let username = sessionStorage.getItem('username')
+      let userid = sessionStorage.getItem('userid');
+      console.log(this.props.location)
+      let shareid = this.props.location.search.split('?id=')[1];
+      console.log(shareid)
+      let commons = this.state.commons;
+      commons.push({
+        commonname: value,
+        commonuser: username
+      })
+      this.setState({
+        commons: commons
+      })
+      this.props.submitCommon({
+        commonname: value,
+        commonuser: username,
+        userid: userid,
+        shareid: shareid
+      })
+    }
     render() {
         const {hasComment,timeMenus,writeMenus,commons} = this.state;
         console.log(hasComment)
@@ -105,9 +168,33 @@ class Comment extends Component {
                                             </td>
                                         </tr>
                                     )
-                                }):''
+                                }):<div className="NoCom">
+                                    <img src={common.nocommon.default}></img>
+                                    <p>暂无评论</p>
+                                </div>
                             }
                         </tbody>
+                        <div className="comContainer">
+                          <div className="comment">
+                            <div className="header">
+                              <div ref="editorElemMenu"
+                                  style={{backgroundColor:'#f1f1f1',border:"1px solid #ccc"}}
+                                  className="editorElem-menu">
+                              </div>
+                            </div>
+                            <div className="body">
+                              <div
+                                  style={{
+                                      border:"1px solid #ccc",
+                                  }}
+                                  ref="editorElemBody" className="editorElem-body">
+                              </div>
+                            </div>
+                          </div>
+                          <div className="btn">
+                            <button className="submit" onClick={()=>this.submit()}>发送</button>
+                          </div>
+                        </div>
                         <div className="timeMenus" style={timeMenus?{display: 'block'}:{display:'none'}}>
                             <p>排序方式</p>
                             <ul>
@@ -145,4 +232,5 @@ let mapStateToProps = (state) => {
 
 export default connect(mapStateToProps,{
     initCommon,
+    submitCommon,
 })(Comment);

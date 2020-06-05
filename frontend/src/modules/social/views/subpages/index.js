@@ -9,7 +9,12 @@ import RecomBP from '../../../../components/RecomBP';
 import Photos from '../../../../components/Photos';
 import {
     initSocialnrjx,
+    initSocialdptj,
 } from '../../models/social';
+import {
+  openDataPdfRequest,
+  openDataPicRequest,
+} from '../../services';
 const pdful = require('../染色体.pdf');
 
 class SocialIndex extends Component {
@@ -19,14 +24,26 @@ class SocialIndex extends Component {
             visiably: true,
             pics: [],
             nrjx: [],
+            dptj: [],
         }
     }
     componentDidMount() {
-        this.props.initSocialnrjx();
+        this.props.initSocialnrjx(); // 初始化内容精选
+        this.props.initSocialdptj(); // 初始化单品推荐
     }
     openModal = (type,systemid) => {
         console.log(type)
+        console.log(systemid)
         if (type == "photo" || type === "photo") {
+          openDataPicRequest({shareid:systemid})
+                .then(res=>{
+                    console.log(res)
+                    this.setState({
+                        filename: res.filename,
+                        disc: res.disc,
+                        pics: res.content
+                    })
+                })
             this.setState({
                 visiably: false
             })
@@ -35,8 +52,7 @@ class SocialIndex extends Component {
             console.log(this.props.history.push)
             this.props.history.push(`/software/?id=${systemid}`)
         } else if (type == 'pdf' || type === "pdf") {
-            console.log(pdful)
-            window.open(pdful.default, '_blank');
+            window.open('/#/pdf?shareid='+systemid, '_blank');
         } else if (type == 'live' || type === "live") {
             this.props.history.push(`/live/?id=${systemid}`)
         }
@@ -48,11 +64,12 @@ class SocialIndex extends Component {
     }
     componentWillReceiveProps(nextProps) {
         this.setState({
-            nrjx: this.props.socials.nrjxData
+            nrjx: this.props.socials.nrjxData,
+            dptj: this.props.socials.dptjData
         })
     }
     render() {
-        const {visiably,pics,nrjx} = this.state;
+        const {visiably,pics,nrjx,dptj} = this.state;
         return (
             <Fragment>
                 <section className='cont2'>
@@ -66,8 +83,19 @@ class SocialIndex extends Component {
                                 <ul>
                                     {
                                         Object.keys(nrjx).length? nrjx.map(item=>{
+                                          console.log(item)
                                             return (
-                                                <ContentS img={item.bc?item.bc:common.mainImg4.default} title={item.filename} time={item.sharetime} fav={item.fav} writer="Ricardom" like={item.liked}/>
+                                                <ContentS 
+                                                  openModal={this.openModal} 
+                                                  img={item.bc?item.bc:common.mainImg4.default} 
+                                                  title={item.filename} 
+                                                  time={item.sharetime}
+                                                  fav={item.fav} 
+                                                  writer="Ricardom" 
+                                                  like={item.liked}
+                                                  type={item.filetype}
+                                                  shareid={item.shareid}
+                                                />
                                             )
                                         }):''
                                     }
@@ -92,11 +120,13 @@ class SocialIndex extends Component {
                             </p>
                             <div className="Content">
                                 <ul>
-                                    <SingleP openModal={this.openModal} type="photo" title="广师铁板烧" num={1125} img={common.mainImg6.default} shareid="ph46782"/>
-                                    <SingleP openModal={this.openModal} type="software" title="交友软件" num={1125} img={common.mainImg7.default} shareid="s43572"/>
-                                    <SingleP openModal={this.openModal} type="pdf" title="07染色体数目变异" num={1125} img={common.mainImg8.default} shareid="pd4156477"/>
-                                    <SingleP openModal={this.openModal} type="live" title="被骂“滚出娱乐圈”的她，如今却成为白富美，走上人生巅峰" num={1125} img={common.mainImg9.default}/>
-                                    <SingleP openModal={this.openModal} type="software" title="夹克" num={1125} img={common.mainImg10.default} shareid="l232"/>
+                                  {
+                                    Object.keys(dptj).length ? dptj.map(item => {
+                                      return (
+                                        <SingleP openModal={this.openModal} type={item.filetype} title={item.filename} num={1125} img={item.bc} shareid={item.shareid}/>
+                                      )
+                                    }):''
+                                  }
                                 </ul>
                             </div>
                         </div>
@@ -135,4 +165,5 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, {
     initSocialnrjx,
+    initSocialdptj,
 })(withRouter(SocialIndex));

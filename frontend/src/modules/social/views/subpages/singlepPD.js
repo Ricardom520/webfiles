@@ -58,10 +58,10 @@ class singlepPD extends Component {
             this.setState({
                 index:index
             })
-            this.props.initDataLive({index: index})
+            this.props.initDataPdf({index: index})
         }
         if (index < n && 1 < n && index < 1) {
-            this.props.initDataLive({index: index})
+            this.props.initDataPdf({index: index})
         }
     }
     componentWillReceiveProps(nextProps) {
@@ -80,23 +80,17 @@ class singlepPD extends Component {
             console.log(this.props.history.push)
             this.props.history.push(`/software/?id=${systemid}`)
         } else if (type == 'pdf' || type === "pdf") {
-            console.log(pdful)
-            this.openDataPdf(shareid)
+          window.open('/#/pdf?shareid='+shareid, '_blank');
         } else if (type == 'live' || type === "live") {
             this.props.history.push(`/live/?id=${systemid}`)
         }
-    }
-    hideModal = () => {
-        this.setState({
-            visiably: true
-        })
     }
     openDataPdf = (shareid) => {
         console.log(shareid)
         openDataPdfRequest({shareid:shareid})
             .then(res=>{
                 console.log(res)
-                window.open('/#/pdf?data='+res.Content, '_blank');
+                window.open('/#/pdf?data='+res.content, '_blank');
             })
     }
     render() {

@@ -20,6 +20,7 @@ let initState = {
 export default (state = initState, action) => {
     switch (action.type) {
         case actionTypes.INITDATA_MYFILE:
+          console.log(action.payload)
             state.myfilesData = action.payload.res;
             state.curParentid = action.payload.parentid;
             if (action.payload.filename) {

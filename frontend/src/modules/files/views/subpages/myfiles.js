@@ -333,7 +333,6 @@ class Myfiles extends Component {
                     }
                 </div>
                 <a ref={download=>this.download=download} style={{display:'none'}} download>下载隐藏按钮</a>
-                <Load/>
             </Fragment>
         )
     }

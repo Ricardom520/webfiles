@@ -311,6 +311,7 @@ export const shareFile = (params) => {
             .then(res=>{
                 console.log(res)
                 if (res.code === 0) {
+                  console.log("捡来了")
                     message.success(res.msg);
                 }
                 dispatch({type: actionTypes.SHAREDATA_FILE})

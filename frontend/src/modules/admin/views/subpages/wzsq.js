@@ -1,8 +1,29 @@
 import React, {Component} from 'react';
 import {DatePicker, Input, Button, Table, Modal} from 'antd';
+import { connect } from 'react-redux';
+import {withRouter} from 'react-router-dom';
 import './shsq.less';
+import {
+  initPdf
+} from '../../models/admin';
 
 class Wzsq extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      datas: []
+    }
+  }
+  componentDidMount() {
+    console.log("初始化")
+    this.props.initPdf()
+  }
+  componentWillReceiveProps(nextProps) {
+    console.log(this.props)
+    this.setState({
+      datas: this.props.admin.pdf
+    })
+  }
     SureDelete() {
         Modal.confirm({
             title: '确定要删除吗?',
@@ -11,128 +32,55 @@ class Wzsq extends Component {
         })
     }
     render() {
-        const dataSource = [
-            {
-              key: '1',
-              username: '胡彦斌',
-              updateTime: '2019-2-11',
-              title: '西湖区湖底公园1号',
-            },
-            {
-              key: '2',
-              username: '胡彦祖',
-              updateTime: '2019-2-11',
-              title: '西湖区湖底公园1号',
-              desc: '说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。'
-            },
-            {
-                key: '3',
-                username: '胡彦斌',
-                updateTime: '2019-2-11',
-                title: '西湖区湖底公园1号',
-            },
-            {
-                key: '4',
-                username: '胡彦祖',
-                updateTime: '2019-2-11',
-                title: '西湖区湖底公园1号',
-                desc: '说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。'
-            },
-            {
-                key: '5',
-                username: '胡彦斌',
-                updateTime: '2019-2-11',
-                title: '西湖区湖底公园1号',
-            },
-            {
-                key: '6',
-                username: '胡彦祖',
-                updateTime: '2019-2-11',
-                title: '西湖区湖底公园1号',
-                desc: '说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。'
-            },
-            {
-                key: '7',
-                username: '胡彦斌',
-                updateTime: '2019-2-11',
-                title: '西湖区湖底公园1号',
-            },
-            {
-                key: '8',
-                username: '胡彦祖',
-                updateTime: '2019-2-11',
-                title: '西湖区湖底公园1号',
-                desc: '说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。'
-            },
-            {
-                key: '9',
-                username: '胡彦斌',
-                updateTime: '2019-2-11',
-                title: '西湖区湖底公园1号',
-            },
-            {
-                key: '10',
-                username: '胡彦祖',
-                updateTime: '2019-2-11',
-                title: '西湖区湖底公园1号',
-                desc: '说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。'
-            },
-            {
-                key: '11',
-                username: '胡彦祖',
-                updateTime: '2019-2-11',
-                title: '西湖区湖底公园1号',
-                desc: '说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。'
-            },
-          ];          
-          const columns = [
-            {
-              title: '用户名',
-              dataIndex: 'username',
-              key: 'username',
-              width: '5%'
-            },
-            {
-              title: '发布时间',
-              dataIndex: 'updateTime',
-              key: 'updateTime',
-              width: '5%'
-            },
-            {
-              title: '标题',
-              dataIndex: 'title',
-              key: 'title',
-              width: '8%'
-            },
-            {
-                title: '内容描述',
-                dataIndex: 'desc',
-                key: 'desc',
-                width: '25%',
-                onCell: () => {
-                    return {
-                        style: {
-                            maxWidth: 150,
-                            overflow: 'hidden',
-                            whiteSpace: 'nowrap',
-                            textOverflow:'ellipsis',
-                            cursor:'pointer'
-                        }
-                    }
-                },
-            },
-            {
-                title: '操作',
-                width: '5%',
-                render: (text) =>{
-                    return (
-                        <div>
-                            <a>查看</a> | <a onClick={()=>this.SureDelete()}>删除</a>
-                        </div>
-                    )
-                }
-            }
-        ];
+      const columns = [
+        {
+          title: '用户名',
+          dataIndex: 'username',
+          key: 'username',
+          width: '5%'
+        },
+        {
+          title: '发布时间',
+          dataIndex: 'sharetime',
+          key: 'sharetime',
+          width: '5%'
+        },
+        {
+          title: '标题',
+          dataIndex: 'filename',
+          key: 'filename',
+          width: '8%'
+        },
+        {
+          title: '内容描述',
+          dataIndex: 'disc',
+          key: 'disc',
+          width: '25%',
+          onCell: () => {
+              return {
+                  style: {
+                      maxWidth: 150,
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
+                      textOverflow:'ellipsis',
+                      cursor:'pointer'
+                  }
+              }
+          },
+        },
+        {
+          title: '操作',
+          width: '5%',
+          render: (text) =>{
+            return (
+              <div>
+                <a>查看</a> | <a onClick={()=>this.SureDelete()}>删除</a>
+              </div>
+            )
+          }
+        }
+      ];
+      const {datas} = this.state;
         return (
             <div className="modal3">
                 <div className="formContainer">
@@ -152,10 +100,18 @@ class Wzsq extends Component {
                         <Button>重置</Button>
                     </div>
                 </div>
-                <Table dataSource={dataSource} columns={columns} />
+                <Table dataSource={datas} columns={columns} />
             </div>
         )
     }
 }
 
-export default Wzsq;
+const mapStateToProps = (state) => {
+  return {
+      admin: state.Admin
+  }
+}
+
+export default connect(mapStateToProps,{
+                        initPdf
+                      })(withRouter(Wzsq));

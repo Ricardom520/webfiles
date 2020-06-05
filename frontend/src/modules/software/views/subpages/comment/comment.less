@@ -90,7 +90,51 @@
                     border-left: 1px solid #D1D5DA;
                     background: #F6F8FA;
                 }
+                .NoCom {
+                  text-align: center;
+                  p {
+                    font-size: 20px;
+                  }
+                }
             }
+            .comContainer {
+              .comment {
+                display: flex;
+                flex-direction: column;
+                height: 300px;
+                width: 60%;
+                text-align: left;
+                font-size: 16px;
+                margin: 0 auto;
+                .body {
+                  height: 100%;
+                  .editorElem-body {
+                    height: 100%;
+                  }
+                }
+              }
+              .btn {
+                padding: 20px 0;
+                text-align: center;
+                  button {
+                    cursor: pointer;
+                    outline: none;
+                    color: #fff;
+                    width: 80px;
+                    font-size: 14px;
+                    border: none;
+                    border-radius: 5px;
+                    margin: 0px 20px;
+                    padding: 4px 8px;
+                  }
+                  .submit {
+                      background: #1A73E8;
+                  }
+                  .submit:hover {
+                      background: #3D8AEF;
+                  }
+                }
+              }
             .timeMenus {
                 position: absolute;
                 top: 48px;

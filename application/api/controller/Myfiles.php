@@ -3,6 +3,8 @@ namespace app\api\controller;
 use think\Request;
 use think\Db;
 use think\Controller;
+use think\Cache;
+use think\cache\driver\Redis;
 
 class Myfiles extends Controller
 {
@@ -276,9 +278,9 @@ class Myfiles extends Controller
         $sql = 'select * from files f inner join users u on f.userid = u.userid where f.systemid="'.$systemid.'" and f.userid="'.$userid.'"';
         $res = Db::query($sql);
         if($filetype == 9) {
-            $Insql = 'Insert into sharespdf (shareid,userid,systemid,filename,content,nc,username,sharetime,disc,bc) values 
-            ("'.$shareid.'","'.$userid.'","'.$systemid.'","'.$rfilename.'","'.$res[0]['content'].'","'
-            .$res[0]['nc'].'","'.$res[0]['username'].'","'.$sharetime.'","'.$disc.'","'.$bc.'")';
+            $Insql = 'Insert into sharespdf (shareid,userid,systemid,filename,content,nc,username,sharetime,disc,bc,filetype) values 
+            ("'.$shareid.'","'.$userid.'","'.$systemid.'","'.$filename.'","'.$res[0]['content'].'","'
+            .$res[0]['nc'].'","'.$res[0]['username'].'","'.$sharetime.'","'.$disc.'","'.$bc.'","pdf")';
         }
         Db::query($Insql);
         $arr = array(
@@ -308,13 +310,15 @@ class Myfiles extends Controller
         $filename = $data['filename'];
         $disc = $data['disc'];
         $content = $data['content'];
+        $systemid = $data['systemid'];
         $bc = $content[0];
+        $sharetime = date('Y-m-d H:i:s');
         $Upsql = 'Update files set share = 1, sharetime="'.$sharetime.'" where userid = "'.$userid.'" and systemid="'.$systemid.'"';
         Db::query($Upsql);
         $shareid = 'S'.substr($userid,0,2).time().rand(10,100).'2';
         $sharetime = date('Y-m-d H:i:s');
-        $sql = 'Insert into sharespic (shareid,userid,username,filename,disc,content,sharetime,bc) values 
-                ("'.$shareid.'","'.$userid.'","'.$username.'",\''.$filename.'\',"'.$disc.'",\''.json_encode($content).'\',"'.$sharetime.'","'.$bc['pic'].'")';
+        $sql = 'Insert into sharespic (shareid,userid,username,filename,disc,content,sharetime,bc,filetype) values 
+                ("'.$shareid.'","'.$userid.'","'.$username.'",\''.$filename.'\',"'.$disc.'",\''.json_encode($content).'\',"'.$sharetime.'","'.$bc['pic'].'","photo")';
         Db::query($sql);
         $arr = array(
             'code'=>0,
@@ -346,16 +350,26 @@ class Myfiles extends Controller
         $sharetime = date('Y-m-d H:i:s');
         $Upsql = 'Update files set share = 1, sharetime="'.$sharetime.'" where userid = "'.$userid.'" and systemid="'.$systemid.'"';
         Db::query($Upsql);
-        $Sesql = 'Select content from files where userid ="'.$userid.'" and systemid ="'.$systemid.'"';
+        $Sesql = 'Select content, filename from files where userid ="'.$userid.'" and systemid ="'.$systemid.'"';
         $res = Db::query($Sesql);
-        $Insql = 'Insert into shareswjj (shareid,userid,systemid,filename,disc,content,sharetime,updatetime,bc,filetitlename) values("'.$shareid
-                .'","'.$userid.'","'.$systemid.'","'.$filename.'","'.$disc.'","'.$res[0]['content'].'","'.$sharetime.'","'.$sharetime.'","'.$bc.'","'.$filetitlename.'")';
+        $Insql = 'Insert into shareswjj (shareid,userid,systemid,filename,disc,content,sharetime,updatetime,bc,filetitlename,filetype) values("'.$shareid
+                .'","'.$userid.'","'.$systemid.'","'.$res[0]['filename'].'","'.$disc.'","'.$res[0]['content'].'","'.$sharetime.'","'.$sharetime.'","'.$bc.'","'.$filetitlename.'","software")';
         Db::query($Insql);
         $arr = array(
             'code'=>0,
             'msg'=>'分享成功'
         );
         return $arr;
+    }
+
+    public function openpdf(Request $request)
+    {
+      header('Access-Control-Allow-Origin: *');
+      $data = $request->get();
+      $fid = $data['fid'];
+      $sql = 'Select content from files where systemid="'.$fid.'"';
+      $res = Db::query($sql);
+      return $res[0];
     }
 
     private function mergeSort(&$arr) 

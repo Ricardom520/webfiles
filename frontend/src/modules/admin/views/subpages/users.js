@@ -1,9 +1,30 @@
 import React, {Component} from 'react';
 import {DatePicker, Input, Button, Table, Modal, Select} from 'antd';
 const {Option} = Select;
+import { connect } from 'react-redux';
+import {withRouter} from 'react-router-dom';
+import {
+  initUsers
+} from '../../models/admin';
 import './users.less';
 
 class Users extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      datas: []
+    }
+  }
+  componentDidMount() {
+    console.log("初始化")
+    this.props.initUsers()
+  }
+  componentWillReceiveProps(nextProps) {
+    console.log(this.props)
+    this.setState({
+      datas: this.props.admin.users
+    })
+  }
     SureDelete() {
         Modal.confirm({
             title: '确定要删除吗?',
@@ -11,114 +32,7 @@ class Users extends Component {
             cancelText: '取消'
         })
     }
-    render() {
-        const dataSource = [
-            {
-              key: '1',
-              username: '胡彦斌1',
-              createTime: '2019-2-11',
-              desc: '西湖区湖底公园1号',
-              sex: '男',
-              phone: 10086,
-              email: '15456217@qq.com',
-            },
-            {
-              key: '2',
-              username: '胡彦祖',
-              createTime: '2019-2-11',
-              desc: '西湖区湖底公园1号',
-              sex: '男',
-              phone: 10086,
-              email: '15456217@qq.com',
-              address: '说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。'
-            },
-            {
-                key: '3',
-                username: '胡彦斌',
-                createTime: '2019-2-11',
-                desc: '西湖区湖底公园1号',
-                sex: '男',
-                phone: 10086,
-                email: '15456217@qq.com',
-            },
-            {
-                key: '4',
-                username: '胡彦祖',
-                createTime: '2019-2-11',
-                desc: '西湖区湖底公园1号',
-                sex: '女',
-                phone: 10086,
-                email: '15456217@qq.com',
-                address: '说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。'
-            },
-            {
-                key: '5',
-                username: '胡彦斌',
-                createTime: '2019-2-11',
-                desc: '西湖区湖底公园1号',
-                sex: '男',
-                phone: 10086,
-                email: '15456217@qq.com',
-            },
-            {
-                key: '6',
-                username: '胡彦祖',
-                createTime: '2019-2-11',
-                desc: '西湖区湖底公园1号',
-                sex: '女',
-                phone: 10086,
-                email: '15456217@qq.com',
-                address: '说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。'
-            },
-            {
-                key: '7',
-                username: '胡彦斌',
-                createTime: '2019-2-11',
-                desc: '西湖区湖底公园1号',
-                sex: '男',
-                phone: 10086,
-                email: '15456217@qq.com',
-            },
-            {
-                key: '8',
-                username: '胡彦祖',
-                createTime: '2019-2-11',
-                desc: '西湖区湖底公园1号',
-                sex: '男',
-                phone: 10086,
-                email: '15456217@qq.com',
-                address: '说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。'
-            },
-            {
-                key: '9',
-                username: '胡彦斌',
-                createTime: '2019-2-11',
-                desc: '西湖区湖底公园1号',
-                sex: '女',
-                phone: 10086,
-                email: '15456217@qq.com',
-            },
-            {
-                key: '10',
-                username: '胡彦祖',
-                createTime: '2019-2-11',
-                desc: '西湖区湖底公园1号',
-                sex: '男',
-                phone: 10086,
-                email: '15456217@qq.com',
-                address: '说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。'
-            },
-            {
-                key: '11',
-                username: '胡彦祖',
-                createTime: '2019-2-11',
-                desc: '西湖区湖底公园1号',
-                sex: '男',
-                phone: 10086,
-                email: '15456217@qq.com',
-                address: '说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。说起“滚出娱乐圈”的这个词，最早是出现在黑粉无数的袁姗姗的身上。没错，她就是我们今天的主角。'
-            },
-          ];          
+    render() {  
           const columns = [
             {
               title: '用户名',
@@ -196,6 +110,7 @@ class Users extends Component {
                 }
             }
         ];
+        const {datas} = this.state;
         return (
             <div className="modal6">
                 <div className="formContainer">
@@ -219,10 +134,18 @@ class Users extends Component {
                         <Button>重置</Button>
                     </div>
                 </div>
-                <Table dataSource={dataSource} columns={columns} />
+                <Table dataSource={datas} columns={columns} />
             </div>
         )
     }
 }
 
-export default Users;
+const mapStateToProps = (state) => {
+  return {
+      admin: state.Admin
+  }
+}
+
+export default connect(mapStateToProps,{
+                        initUsers
+                      })(withRouter(Users));

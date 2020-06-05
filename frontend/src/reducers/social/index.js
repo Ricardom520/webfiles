@@ -6,6 +6,7 @@ let initState = {
     photoData: [],
     softData: [],
     nrjxData: [],
+    dptjData: [],
 }
 
 export default (state = initState, action) => {
@@ -48,6 +49,9 @@ export default (state = initState, action) => {
         case actionTypes.INITDATANRJX_SOCIAL:
             state.nrjxData = action.payload;
             return {...state};
+        case actionTypes.INITDATADPTJ_SOCIAL:
+          state.dptjData = action.payload;
+          return {...state};
         default:
             return state;
     }

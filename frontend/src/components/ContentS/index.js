@@ -5,9 +5,9 @@ import './contentS.less';
 
 class ContentS extends Component {
     render() {
-        const {img, title, time, fav, writer, like} = this.props
+        const {img, title, time, fav, writer, like, openModal, type, shareid} = this.props
         return (
-            <li className="ContentsContainer">
+            <li className="ContentsContainer" onClick={()=>openModal(`${type}`,`${shareid}`)}>
                 <Link>
                     <img src={img}></img>
                     <div className="disc">

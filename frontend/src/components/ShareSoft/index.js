@@ -131,10 +131,12 @@ class ShareSoft extends Component {
                     <div className="middle2" style={proJ?{height:'auto',display:'block'}:{height:'0px',display:'none'}}>
                         <div className="Content">
                             {
-                                Object.keys(hasShareSoft).length?<ul>
+                                hasShareSoft?Object.keys(hasShareSoft).length?<ul>
                                 <li>12</li>
                                 <li>哈哈哈哈</li>
                             </ul>:<div className="no">
+                                暂没有项目哦~
+                            </div>:<div className="no">
                                 暂没有项目哦~
                             </div>
                             }       

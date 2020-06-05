@@ -1,9 +1,30 @@
 import React, {Component} from 'react';
 import {DatePicker, Input, Button, Table, Modal, Select} from 'antd';
+import { connect } from 'react-redux';
+import {withRouter} from 'react-router-dom';
+import {
+  initFiles
+} from '../../models/admin';
 import './wjq.less';
 const {Option} = Select;
 
 class Wjq extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      datas: []
+    }
+  }
+  componentDidMount() {
+    console.log("初始化")
+    this.props.initFiles()
+  }
+  componentWillReceiveProps(nextProps) {
+    console.log(this.props)
+    this.setState({
+      datas: this.props.admin.files
+    })
+  }
     SureDelete() {
         Modal.confirm({
             title: '确定要删除吗?',
@@ -12,94 +33,6 @@ class Wjq extends Component {
         })
     }
     render() {
-        const dataSource = [
-            {
-                key: '1',
-                username: '胡彦斌',
-                updateTime: '2019-2-11',
-                title: '西湖区湖底公园1号',
-                type: 'doc',
-                size: '123MB'
-            },
-            {
-                key: '2',
-                username: '胡彦祖',
-                updateTime: '2019-2-11',
-                title: '西湖区湖底公园1号',
-                type: 'doc',
-                size: '123MB'
-            },
-            {
-                key: '3',
-                username: '胡彦斌',
-                updateTime: '2019-2-11',
-                title: '西湖区湖底公园1号',
-                type: 'doc',
-                size: '123MB'
-            },
-            {
-                key: '4',
-                username: '胡彦祖',
-                updateTime: '2019-2-11',
-                title: '西湖区湖底公园1号',
-                type: 'doc',
-                size: '123MB'
-            },
-            {
-                key: '5',
-                username: '胡彦斌',
-                updateTime: '2019-2-11',
-                title: '西湖区湖底公园1号',
-                type: 'doc',
-                size: '123MB'
-            },
-            {
-                key: '6',
-                username: '胡彦祖',
-                updateTime: '2019-2-11',
-                title: '西湖区湖底公园1号',
-                type: 'doc',
-                size: '123MB'
-            },
-            {
-                key: '7',
-                username: '胡彦斌',
-                updateTime: '2019-2-11',
-                title: '西湖区湖底公园1号',
-            },
-            {
-                key: '8',
-                username: '胡彦祖',
-                updateTime: '2019-2-11',
-                title: '西湖区湖底公园1号',
-                type: 'doc',
-                size: '123MB'
-            },
-            {
-                key: '9',
-                username: '胡彦斌',
-                updateTime: '2019-2-11',
-                title: '西湖区湖底公园1号',
-                type: 'doc',
-                size: '123MB'
-            },
-            {
-                key: '10',
-                username: '胡彦祖',
-                updateTime: '2019-2-11',
-                title: '西湖区湖底公园1号',
-                type: 'doc',
-                size: '123MB'
-            },
-            {
-                key: '11',
-                username: '胡彦祖',
-                updateTime: '2019-2-11',
-                title: '西湖区湖底公园1号',
-                type: 'doc',
-                size: '123MB'
-            },
-          ];          
           const columns = [
             {
               title: '用户名',
@@ -109,26 +42,26 @@ class Wjq extends Component {
             },
             {
               title: '更新时间',
-              dataIndex: 'updateTime',
-              key: 'updateTime',
+              dataIndex: 'modifytime',
+              key: 'modifytime',
               width: '15%'
             },
             {
               title: '文件名',
-              dataIndex: 'title',
-              key: 'title',
+              dataIndex: 'filename',
+              key: 'filename',
               width: '15%'
             },
             {
                 title: '文件种类',
-                dataIndex: 'type',
-                key: 'type',
+                dataIndex: 'filetype_cn',
+                key: 'filetype_cn',
                 width: '15%',
             },
             {
                 title: '文件大小',
-                dataIndex: 'size',
-                key: 'size',
+                dataIndex: 'filesize',
+                key: 'filesize',
                 width: '15%',
             },
             {
@@ -143,6 +76,7 @@ class Wjq extends Component {
                 }
             }
         ];
+        const {datas} = this.state;
         return (
             <div className="modal4">
                 <div className="formContainer">
@@ -176,10 +110,18 @@ class Wjq extends Component {
                         <Button>重置</Button>
                     </div>
                 </div>
-                <Table dataSource={dataSource} columns={columns} />
+                <Table dataSource={datas} columns={columns} />
             </div>
         )
     }
 }
 
-export default Wjq;
+const mapStateToProps = (state) => {
+  return {
+      admin: state.Admin
+  }
+}
+
+export default connect(mapStateToProps,{
+                        initFiles
+                      })(withRouter(Wjq));

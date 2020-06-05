@@ -1,7 +1,9 @@
 const AutoPreFixer = require('autoprefixer'); // 给 CSS3 的属性添加前缀，防止 CSS 样式冲突,结合 postcss-loader
 const webpack = require('webpack');
 const merge = require('webpack-merge');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const paths = require('./paths');
+const path = require('path');
 const common = require('./webpack.common');
 
 const devWebpackConfig = {
@@ -48,7 +50,7 @@ const devWebpackConfig = {
     },
     plugins: [
         new webpack.NamedChunksPlugin(), // 当开启 HMR 的时候使用该插件会显示模块的相对路径，建议用于开发环境。
-        new webpack.HotModuleReplacementPlugin() // 启用模块热替换
+        new webpack.HotModuleReplacementPlugin(), // 启用模块热替换
     ]
 };
 module.exports = merge(common, devWebpackConfig);

@@ -49,5 +49,21 @@ class Software extends Controller
         $res = Db::query($sql);
         return $res;
     }
+
+    public function subcom(Request $request)
+    {
+      header('Access-Control-Allow-Origin: *');
+      $data = $request->post();
+      $shareid = $data['shareid'];
+      $userid = $data['userid'];
+      $commonname = $data['commonname'];
+      $commonuser = $data['commonuser'];
+      $commontime = date('Y-m-d H:i:s');
+      $commonid = $shareid.substr(time(),0,3);
+      $sql = 'Insert into commons (shareid,userid,commonid,commonname,commontime,commonuser) values 
+                ("'.$shareid.'","'.$userid.'","'.$commonid.'","'.$commonname.'","'.$commontime.'","'.$commonuser.'")';
+      Db::query($sql);
+      return $sql;
+    }
 }
 ?>
